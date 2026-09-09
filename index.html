@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Broadcast WhatsApp</title>
+    <title>Broadcast WhatsApp Pro</title>
     <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
     <style>
         /* ================================================================ */
@@ -44,7 +44,7 @@
         /* ========== LAYOUT ========== */
         /* ================================================================ */
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
         }
 
@@ -53,7 +53,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 20px 28px;
+            padding: 16px 24px;
             background: #fff;
             border-radius: var(--radius);
             box-shadow: var(--shadow);
@@ -69,17 +69,46 @@
         }
 
         .header-logo {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, var(--primary), #8b5cf6);
+            width: 50px;
+            height: 50px;
             border-radius: 14px;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 2px solid var(--primary);
+            background: #f1f5f9;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
-            color: #fff;
+            cursor: pointer;
+            transition: all var(--transition);
+            position: relative;
+        }
+
+        .header-logo:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+        }
+
+        .header-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .header-logo .logo-placeholder {
+            font-size: 28px;
             font-weight: 800;
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+            color: var(--primary);
+        }
+
+        .header-logo input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
         }
 
         .header-title h1 {
@@ -98,7 +127,7 @@
 
         .header-stats {
             display: flex;
-            gap: 20px;
+            gap: 16px;
             flex-wrap: wrap;
         }
 
@@ -119,19 +148,23 @@
             font-weight: 700;
         }
 
+        .stat-badge .pending-count {
+            color: var(--warning);
+        }
+
         /* ================================================================ */
-        /* ========== GRID ========== */
+        /* ========== GRID 3 ========== */
         /* ================================================================ */
-        .grid-2 {
+        .grid-3 {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
         }
 
         .card {
             background: #fff;
             border-radius: var(--radius);
-            padding: 24px;
+            padding: 20px;
             box-shadow: var(--shadow);
             border: 1px solid var(--border);
             transition: all var(--transition);
@@ -146,7 +179,7 @@
             font-size: 15px;
             font-weight: 700;
             color: var(--dark);
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -161,11 +194,16 @@
             color: var(--primary);
         }
 
+        .card-title .badge.warning {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
         /* ================================================================ */
         /* ========== FORM ELEMENTS ========== */
         /* ================================================================ */
         .form-group {
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
 
         .form-group label {
@@ -224,8 +262,8 @@
         /* ================================================================ */
         .drop-zone {
             border: 2px dashed var(--border);
-            border-radius: 14px;
-            padding: 32px 20px;
+            border-radius: 12px;
+            padding: 24px 16px;
             text-align: center;
             cursor: pointer;
             transition: all var(--transition);
@@ -236,31 +274,29 @@
         .drop-zone:hover {
             border-color: var(--primary);
             background: #f8faff;
-            transform: scale(1.01);
         }
 
         .drop-zone.dragover {
             border-color: var(--primary);
             background: #eef2ff;
-            transform: scale(1.02);
         }
 
         .drop-zone .icon {
-            font-size: 40px;
-            margin-bottom: 8px;
+            font-size: 32px;
+            margin-bottom: 4px;
             display: block;
         }
 
         .drop-zone .text {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
             color: var(--gray);
         }
 
         .drop-zone .sub-text {
-            font-size: 12px;
+            font-size: 11px;
             color: #9ca3af;
-            margin-top: 4px;
+            margin-top: 2px;
         }
 
         .drop-zone input[type="file"] {
@@ -276,55 +312,45 @@
         .file-info {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 10px 14px;
+            gap: 10px;
+            padding: 8px 12px;
             background: #eef2ff;
-            border-radius: 10px;
-            margin-top: 12px;
+            border-radius: 8px;
+            margin-top: 10px;
             animation: fadeIn 0.3s ease-out;
+            font-size: 12px;
         }
 
         .file-info .name {
             font-weight: 600;
-            font-size: 13px;
             color: var(--dark);
             flex: 1;
             word-break: break-all;
         }
 
-        .file-info .size {
-            font-size: 12px;
-            color: var(--gray);
-        }
-
         .file-info .remove {
             background: none;
             border: none;
-            font-size: 18px;
+            font-size: 16px;
             cursor: pointer;
             color: var(--danger);
             padding: 0 4px;
-            transition: transform 0.2s;
-        }
-
-        .file-info .remove:hover {
-            transform: scale(1.2);
         }
 
         /* ================================================================ */
         /* ========== CONTACT LIST ========== */
         /* ================================================================ */
         .contact-list {
-            max-height: 260px;
+            max-height: 200px;
             overflow-y: auto;
             border: 1px solid var(--border);
-            border-radius: 12px;
+            border-radius: 10px;
             background: #fafcff;
             margin-top: 4px;
         }
 
         .contact-list .empty {
-            padding: 30px 20px;
+            padding: 20px;
             text-align: center;
             color: #9ca3af;
             font-size: 13px;
@@ -333,8 +359,8 @@
         .contact-item {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 10px 14px;
+            gap: 10px;
+            padding: 8px 12px;
             border-bottom: 1px solid var(--border);
             transition: background 0.2s;
         }
@@ -348,8 +374,8 @@
         }
 
         .contact-item .avatar {
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--primary), #8b5cf6);
             color: #fff;
@@ -357,7 +383,7 @@
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            font-size: 14px;
+            font-size: 12px;
             flex-shrink: 0;
         }
 
@@ -373,19 +399,19 @@
         }
 
         .contact-item .info .phone {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--gray);
         }
 
         .contact-item .remove-btn {
             background: none;
             border: none;
-            font-size: 16px;
+            font-size: 14px;
             color: #9ca3af;
             cursor: pointer;
-            padding: 4px;
+            padding: 2px 6px;
+            border-radius: 4px;
             transition: all 0.2s;
-            border-radius: 50%;
         }
 
         .contact-item .remove-btn:hover {
@@ -400,7 +426,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 10px 0 6px 0;
+            padding: 8px 0 4px 0;
             font-size: 13px;
             color: var(--gray);
         }
@@ -417,8 +443,8 @@
             font-size: 12px;
             cursor: pointer;
             font-weight: 600;
-            padding: 4px 12px;
-            border-radius: 8px;
+            padding: 4px 10px;
+            border-radius: 6px;
             transition: all 0.2s;
         }
 
@@ -430,10 +456,10 @@
         /* ========== BUTTONS ========== */
         /* ================================================================ */
         .btn {
-            padding: 10px 20px;
+            padding: 10px 18px;
             border: none;
             border-radius: 12px;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             cursor: pointer;
             transition: all var(--transition);
@@ -486,9 +512,14 @@
             box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
         }
 
+        .btn-warning {
+            background: linear-gradient(135deg, var(--warning), #d97706);
+            color: #fff;
+        }
+
         .btn-sm {
-            padding: 6px 14px;
-            font-size: 12px;
+            padding: 5px 12px;
+            font-size: 11px;
             border-radius: 8px;
         }
 
@@ -508,15 +539,9 @@
         /* ================================================================ */
         .template-actions {
             display: flex;
-            gap: 8px;
-            margin-top: 8px;
+            gap: 6px;
+            margin-top: 6px;
             flex-wrap: wrap;
-        }
-
-        .template-actions .btn {
-            padding: 6px 14px;
-            font-size: 12px;
-            border-radius: 8px;
         }
 
         /* ================================================================ */
@@ -530,10 +555,10 @@
         }
 
         .variable-hint summary {
-            padding: 10px 14px;
+            padding: 8px 12px;
             cursor: pointer;
             font-weight: 600;
-            font-size: 13px;
+            font-size: 12px;
             color: var(--primary);
             background: #f8faff;
             transition: background 0.2s;
@@ -547,7 +572,7 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 4px 16px;
-            padding: 12px 16px;
+            padding: 10px 14px;
             background: #fafcff;
             font-size: 12px;
             border-top: 1px solid var(--border);
@@ -555,7 +580,7 @@
 
         .variable-hint .var-grid code {
             background: #f1f5f9;
-            padding: 2px 8px;
+            padding: 2px 6px;
             border-radius: 4px;
             font-size: 11px;
             color: var(--primary);
@@ -563,7 +588,7 @@
         }
 
         .variable-hint .var-grid .var-item {
-            padding: 4px 0;
+            padding: 3px 0;
             color: var(--gray);
         }
 
@@ -571,7 +596,7 @@
         /* ========== PROGRESS ========== */
         /* ================================================================ */
         .progress-container {
-            margin-top: 16px;
+            margin-top: 14px;
             display: none;
         }
 
@@ -610,13 +635,224 @@
         }
 
         /* ================================================================ */
-        /* ========== TOAST / NOTIFICATION ========== */
+        /* ========== HISTORY ========== */
+        /* ================================================================ */
+        .history-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+            transition: background 0.2s;
+            border-radius: 8px;
+        }
+
+        .history-item:hover {
+            background: #f8fafc;
+        }
+
+        .history-item .status-icon {
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .history-item .status-icon.success {
+            color: #10b981;
+        }
+
+        .history-item .status-icon.failed {
+            color: #ef4444;
+        }
+
+        .history-item .status-icon.pending {
+            color: var(--warning);
+        }
+
+        .history-item .info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .history-item .info .name {
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--dark);
+        }
+
+        .history-item .info .detail {
+            font-size: 11px;
+            color: var(--gray);
+        }
+
+        .history-item .info .detail .status-badge {
+            display: inline-block;
+            padding: 1px 10px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .history-item .info .detail .status-badge.success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .history-item .info .detail .status-badge.failed {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .history-item .info .detail .status-badge.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .history-item .time {
+            font-size: 10px;
+            color: #9ca3af;
+            flex-shrink: 0;
+        }
+
+        .history-item .action-btn {
+            padding: 4px 10px;
+            font-size: 11px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .history-item .action-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .history-item .action-btn.confirm {
+            background: #10b981;
+            color: white;
+        }
+
+        .history-item .action-btn.confirm:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .history-item .action-btn.fail {
+            background: #ef4444;
+            color: white;
+        }
+
+        .history-empty {
+            text-align: center;
+            padding: 30px 16px;
+            color: #9ca3af;
+        }
+
+        .history-empty .icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        /* ================================================================ */
+        /* ========== MODAL CONFIRM ========== */
+        /* ================================================================ */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            animation: fadeIn 0.2s ease-out;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-box {
+            background: #fff;
+            border-radius: 20px;
+            padding: 28px 32px;
+            max-width: 420px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: modalPop 0.3s ease-out;
+        }
+
+        @keyframes modalPop {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .modal-box h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--dark);
+        }
+
+        .modal-box .subtitle {
+            font-size: 13px;
+            color: var(--gray);
+            margin-bottom: 16px;
+        }
+
+        .modal-box .contact-preview {
+            background: #f8fafc;
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border);
+        }
+
+        .modal-box .contact-preview .name {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--dark);
+        }
+
+        .modal-box .contact-preview .phone {
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        .modal-box .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .modal-box .modal-actions .btn {
+            flex: 1;
+        }
+
+        /* ================================================================ */
+        /* ========== TOAST ========== */
         /* ================================================================ */
         #toastContainer {
             position: fixed;
             top: 20px;
             right: 20px;
-            z-index: 9999;
+            z-index: 99999;
             display: flex;
             flex-direction: column;
             gap: 8px;
@@ -625,13 +861,13 @@
 
         .toast {
             pointer-events: auto;
-            padding: 12px 20px;
+            padding: 12px 18px;
             border-radius: 12px;
             background: var(--dark);
             color: #fff;
             font-size: 13px;
             font-weight: 500;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
             animation: slideInRight 0.3s ease-out;
             max-width: 380px;
         }
@@ -651,7 +887,7 @@
         .toast .toast-close {
             background: none;
             border: none;
-            color: rgba(255,255,255,0.7);
+            color: rgba(255, 255, 255, 0.7);
             font-size: 16px;
             cursor: pointer;
             margin-left: 12px;
@@ -659,60 +895,115 @@
         }
 
         @keyframes slideInRight {
-            from { opacity: 0; transform: translateX(100px); }
-            to { opacity: 1; transform: translateX(0); }
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
 
         /* ================================================================ */
         /* ========== RESPONSIVE ========== */
         /* ================================================================ */
-        @media (max-width: 1024px) {
-            .grid-2 {
-                grid-template-columns: 1fr;
+        @media (max-width: 1200px) {
+            .grid-3 {
+                grid-template-columns: 1fr 1fr;
             }
         }
 
         @media (max-width: 768px) {
-            body { padding: 12px; }
-            .header { padding: 16px 20px; flex-direction: column; align-items: flex-start; }
-            .header-stats { width: 100%; justify-content: flex-start; }
-            .stat-badge { font-size: 12px; padding: 4px 12px; }
-            .card { padding: 16px; }
-            .variable-hint .var-grid { grid-template-columns: 1fr; }
-            .template-actions { flex-direction: row; }
+            body {
+                padding: 12px;
+            }
+            .header {
+                padding: 14px 16px;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .header-stats {
+                width: 100%;
+                justify-content: flex-start;
+            }
+            .stat-badge {
+                font-size: 12px;
+                padding: 4px 12px;
+            }
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+            .card {
+                padding: 16px;
+            }
+            .variable-hint .var-grid {
+                grid-template-columns: 1fr;
+            }
+            .modal-box {
+                padding: 20px;
+            }
+            .modal-box .modal-actions {
+                flex-direction: column;
+            }
         }
 
         @media (max-width: 480px) {
-            .header-title h1 { font-size: 18px; }
-            .header-logo { width: 40px; height: 40px; font-size: 18px; }
-            .stat-badge { font-size: 11px; padding: 4px 10px; }
-            .btn { font-size: 13px; padding: 8px 16px; }
-            .contact-item { padding: 8px 12px; }
-            .contact-item .avatar { width: 30px; height: 30px; font-size: 12px; }
+            .header-title h1 {
+                font-size: 18px;
+            }
+            .header-logo {
+                width: 42px;
+                height: 42px;
+            }
+            .stat-badge {
+                font-size: 11px;
+                padding: 4px 10px;
+            }
+            .btn {
+                font-size: 12px;
+                padding: 8px 14px;
+            }
+            .contact-item {
+                padding: 6px 10px;
+            }
+            .contact-item .avatar {
+                width: 28px;
+                height: 28px;
+                font-size: 10px;
+            }
         }
 
         /* ================================================================ */
         /* ========== SCROLLBAR ========== */
         /* ================================================================ */
-        .contact-list::-webkit-scrollbar {
+        .contact-list::-webkit-scrollbar,
+        .history-list::-webkit-scrollbar {
             width: 4px;
         }
 
-        .contact-list::-webkit-scrollbar-track {
+        .contact-list::-webkit-scrollbar-track,
+        .history-list::-webkit-scrollbar-track {
             background: transparent;
         }
 
-        .contact-list::-webkit-scrollbar-thumb {
+        .contact-list::-webkit-scrollbar-thumb,
+        .history-list::-webkit-scrollbar-thumb {
             background: #d1d5db;
             border-radius: 4px;
         }
 
-        .contact-list::-webkit-scrollbar-thumb:hover {
+        .contact-list::-webkit-scrollbar-thumb:hover,
+        .history-list::-webkit-scrollbar-thumb:hover {
             background: #9ca3af;
         }
     </style>
@@ -723,21 +1014,25 @@
         <!-- ===== HEADER ===== -->
         <header class="header">
             <div class="header-left">
-                <div class="header-logo">📢</div>
+                <div class="header-logo" id="logoContainer">
+                    <span class="logo-placeholder" id="logoPlaceholder">📢</span>
+                    <input type="file" id="logoInput" accept="image/*">
+                </div>
                 <div class="header-title">
-                    <h1>Broadcast WhatsApp</h1>
-                    <p>Kirim pesan massal ke banyak kontak</p>
+                    <h1>Broadcast WhatsApp Pro</h1>
+                    <p>Kirim pesan massal dengan konfirmasi per kontak</p>
                 </div>
             </div>
             <div class="header-stats">
                 <div class="stat-badge">📱 Kontak: <span id="contactCountTotal">0</span></div>
-                <div class="stat-badge">📤 Terkirim: <span id="sentCount">0</span></div>
+                <div class="stat-badge">✅ Terkirim: <span id="sentCount">0</span></div>
+                <div class="stat-badge">⏳ Pending: <span class="pending-count" id="pendingCount">0</span></div>
             </div>
         </header>
 
-        <!-- ===== GRID ===== -->
-        <div class="grid-2">
-            <!-- ===== KIRI: KONTAK ===== -->
+        <!-- ===== GRID 3 ===== -->
+        <div class="grid-3">
+            <!-- ===== KOLOM 1: KONTAK ===== -->
             <div class="card">
                 <div class="card-title">
                     📋 Daftar Kontak
@@ -760,8 +1055,8 @@
                 <div class="form-group">
                     <label>Tambah Kontak Manual</label>
                     <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                        <input type="text" id="manualName" class="form-control" placeholder="Nama" style="flex: 1; min-width: 100px;">
-                        <input type="tel" id="manualPhone" class="form-control" placeholder="81234567890" style="flex: 1; min-width: 120px;">
+                        <input type="text" id="manualName" class="form-control" placeholder="Nama" style="flex: 1; min-width: 80px;">
+                        <input type="tel" id="manualPhone" class="form-control" placeholder="81234567890" style="flex: 1; min-width: 100px;">
                         <button class="btn btn-primary btn-sm" id="addManualBtn">➕ Tambah</button>
                     </div>
                     <span class="input-hint">Format nomor: 81234567890 (tanpa +62)</span>
@@ -777,7 +1072,7 @@
                 </div>
             </div>
 
-            <!-- ===== KANAN: PESAN & KIRIM ===== -->
+            <!-- ===== KOLOM 2: PESAN & KIRIM ===== -->
             <div class="card">
                 <div class="card-title">✏️ Template Pesan</div>
 
@@ -791,14 +1086,14 @@
 
                 <!-- Template Actions -->
                 <div class="template-actions">
-                    <button class="btn btn-outline btn-sm" id="saveTemplateBtn">💾 Simpan Template</button>
-                    <button class="btn btn-danger btn-sm" id="deleteTemplateBtn">🗑️ Hapus Template</button>
+                    <button class="btn btn-outline btn-sm" id="saveTemplateBtn">💾 Simpan</button>
+                    <button class="btn btn-danger btn-sm" id="deleteTemplateBtn">🗑️ Hapus</button>
                 </div>
 
                 <!-- Message -->
-                <div class="form-group" style="margin-top: 12px;">
+                <div class="form-group" style="margin-top: 10px;">
                     <label>📝 Pesan <span class="required">*</span></label>
-                    <textarea class="form-control" id="messageInput" rows="6" placeholder="Tulis pesan broadcast..."></textarea>
+                    <textarea class="form-control" id="messageInput" rows="5" placeholder="Tulis pesan broadcast..."></textarea>
                     <span class="input-hint">Gunakan <code>{nama}</code> untuk menyisipkan nama kontak</span>
                 </div>
 
@@ -809,19 +1104,19 @@
                         <div class="var-grid">
                             <div class="var-item"><code>{nama}</code> - Nama kontak</div>
                             <div class="var-item"><code>{phone}</code> - Nomor telepon</div>
-                            <div class="var-item"><code>{index}</code> - Nomor urut (1,2,3...)</div>
+                            <div class="var-item"><code>{index}</code> - Nomor urut</div>
                             <div class="var-item"><code>{total}</code> - Total kontak</div>
                         </div>
                     </details>
                 </div>
 
                 <!-- Kirim -->
-                <div style="margin-top: 16px;">
+                <div style="margin-top: 14px;">
                     <button class="btn btn-success btn-block" id="sendBroadcastBtn">
                         📤 Kirim Broadcast
                     </button>
-                    <div style="margin-top: 8px; font-size: 12px; color: var(--gray); text-align: center;">
-                        ⚠️ Setiap klik akan membuka chat WhatsApp di tab baru. Kirim secara manual.
+                    <div style="margin-top: 6px; font-size: 11px; color: var(--gray); text-align: center;">
+                        ⚠️ Setiap kontak akan muncul popup konfirmasi sebelum dibuka
                     </div>
                 </div>
 
@@ -836,10 +1131,61 @@
                     </div>
                 </div>
             </div>
+
+            <!-- ===== KOLOM 3: HISTORY ===== -->
+            <div class="card">
+                <div class="card-title">
+                    📜 History Broadcast
+                    <span class="badge warning" id="historyBadge">0</span>
+                </div>
+
+                <!-- Filter -->
+                <div class="form-group" style="margin-bottom: 10px;">
+                    <select class="form-control" id="historyFilter" style="padding: 6px 12px; font-size: 12px;">
+                        <option value="all">📋 Semua</option>
+                        <option value="pending">⏳ Pending</option>
+                        <option value="success">✅ Terkirim</option>
+                        <option value="failed">❌ Gagal</option>
+                    </select>
+                </div>
+
+                <!-- List -->
+                <div class="history-list" id="historyList">
+                    <div class="history-empty">
+                        <span class="icon">📭</span>
+                        Belum ada history broadcast
+                    </div>
+                </div>
+
+                <!-- Clear History -->
+                <div style="margin-top: 10px; text-align: right;">
+                    <button class="btn btn-danger btn-sm" id="clearHistoryBtn">🗑️ Hapus History</button>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- ===== TOAST CONTAINER ===== -->
+    <!-- ===== MODAL KONFIRMASI ===== -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal-box">
+            <h3 id="confirmTitle">📤 Konfirmasi Kirim</h3>
+            <div class="subtitle" id="confirmSubtitle">Apakah pesan berhasil terkirim?</div>
+            <div class="contact-preview" id="contactPreview">
+                <div class="name" id="previewName">Nama Kontak</div>
+                <div class="phone" id="previewPhone">+6281234567890</div>
+            </div>
+            <div style="font-size: 12px; color: var(--gray); margin-bottom: 12px; padding: 8px 12px; background: #fef3c7; border-radius: 8px; border-left: 3px solid var(--warning);">
+                ⚠️ <strong>Pastikan pesan sudah terkirim</strong> sebelum melanjutkan ke kontak berikutnya.
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-success" id="confirmSuccess">✅ Berhasil Terkirim</button>
+                <button class="btn btn-danger" id="confirmFailed">❌ Gagal</button>
+                <button class="btn btn-outline" id="confirmStop">⏹️ Stop</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== TOAST ===== -->
     <div id="toastContainer"></div>
 
     <script>
@@ -848,9 +1194,13 @@
         // ================================================================
         const state = {
             contacts: [],
+            history: [],
             sentCount: 0,
             isSending: false,
+            currentIndex: 0,
             templates: {},
+            pendingHistory: [],
+            logo: null,
         };
 
         // ================================================================
@@ -862,6 +1212,7 @@
         const contactCountTotal = $('contactCountTotal');
         const contactBadge = $('contactBadge');
         const sentCountEl = $('sentCount');
+        const pendingCountEl = $('pendingCount');
         const messageInput = $('messageInput');
         const templateSelect = $('templateSelect');
         const progressContainer = $('progressContainer');
@@ -869,6 +1220,14 @@
         const progressText = $('progressText');
         const progressPercent = $('progressPercent');
         const fileInfo = $('fileInfo');
+        const historyList = $('historyList');
+        const historyBadge = $('historyBadge');
+        const historyFilter = $('historyFilter');
+        const confirmModal = $('confirmModal');
+        const previewName = $('previewName');
+        const previewPhone = $('previewPhone');
+        const confirmTitle = $('confirmTitle');
+        const confirmSubtitle = $('confirmSubtitle');
 
         // ================================================================
         // ========== TOAST ==========
@@ -885,6 +1244,34 @@
             setTimeout(() => {
                 if (toast.parentElement) toast.remove();
             }, duration);
+        }
+
+        // ================================================================
+        // ========== LOGO UPLOAD ==========
+        // ================================================================
+        function setupLogoUpload() {
+            const logoInput = $('logoInput');
+            const logoPlaceholder = $('logoPlaceholder');
+            const logoContainer = $('logoContainer');
+
+            logoInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                        logoPlaceholder.style.display = 'none';
+                        const img = document.createElement('img');
+                        img.src = ev.target.result;
+                        img.style.width = '100%';
+                        img.style.height = '100%';
+                        img.style.objectFit = 'cover';
+                        logoContainer.appendChild(img);
+                        state.logo = ev.target.result;
+                        showToast('✅ Logo berhasil diupload!', 'success');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
         }
 
         // ================================================================
@@ -909,7 +1296,6 @@
                 return false;
             }
 
-            // Cek duplikat
             if (state.contacts.some(c => c.phone === formatted)) {
                 showToast(`⚠️ Nomor ${formatted} sudah ada!`, 'warning');
                 return false;
@@ -918,7 +1304,8 @@
             state.contacts.push({
                 id: Date.now() + '_' + Math.random().toString(36).substr(2, 4),
                 name: name.trim() || 'Kontak',
-                phone: formatted
+                phone: formatted,
+                status: 'pending'
             });
 
             renderContacts();
@@ -977,10 +1364,8 @@
             const dropZone = $('dropZone');
             const fileInput = $('excelFile');
 
-            // Click to select file
             dropZone.addEventListener('click', () => fileInput.click());
 
-            // Drag and drop
             dropZone.addEventListener('dragover', (e) => {
                 e.preventDefault();
                 dropZone.classList.add('dragover');
@@ -1020,13 +1405,12 @@
                         return;
                     }
 
-                    // Cari kolom nama dan nomor
                     const headers = Object.keys(json[0]);
                     let nameCol = headers.find(h => /nama|name|Nama|Name/i.test(h));
                     let phoneCol = headers.find(h => /hp|phone|nomor|no|telepon|Phone|HP|No|Telepon/i.test(h));
 
                     if (!phoneCol) {
-                        showToast('⚠️ Kolom nomor tidak ditemukan! Pastikan ada kolom "HP" atau "Phone".', 'error');
+                        showToast('⚠️ Kolom nomor tidak ditemukan!', 'error');
                         return;
                     }
 
@@ -1044,7 +1428,8 @@
                                 state.contacts.push({
                                     id: Date.now() + '_' + Math.random().toString(36).substr(2, 4),
                                     name: nama || 'Kontak',
-                                    phone: formatted
+                                    phone: formatted,
+                                    status: 'pending'
                                 });
                                 added++;
                             } else {
@@ -1058,7 +1443,6 @@
                     renderContacts();
                     showToast(`✅ Import selesai! ${added} kontak ditambahkan, ${skipped} dilewati.`, 'success');
 
-                    // Update file info
                     const fileSize = (file.size / 1024).toFixed(1);
                     fileInfo.innerHTML = `
                         <div class="file-info">
@@ -1081,7 +1465,7 @@
         // ================================================================
         // ========== TEMPLATE FUNCTIONS ==========
         // ================================================================
-        const TEMPLATE_STORAGE_KEY = 'broadcast_templates_v2';
+        const TEMPLATE_STORAGE_KEY = 'broadcast_templates_pro';
 
         function loadTemplates() {
             try {
@@ -1161,8 +1545,145 @@
         }
 
         // ================================================================
+        // ========== HISTORY FUNCTIONS ==========
+        // ================================================================
+        const HISTORY_STORAGE_KEY = 'broadcast_history_pro';
+
+        function loadHistory() {
+            try {
+                const saved = localStorage.getItem(HISTORY_STORAGE_KEY);
+                state.history = saved ? JSON.parse(saved) : [];
+            } catch (e) {
+                state.history = [];
+            }
+            renderHistory();
+        }
+
+        function saveHistory() {
+            try {
+                localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(state.history));
+            } catch (e) {
+                console.error('Save history error:', e);
+            }
+            renderHistory();
+            updateStats();
+        }
+
+        function renderHistory() {
+            const filter = historyFilter.value;
+            let filtered = state.history;
+
+            if (filter === 'pending') {
+                filtered = state.history.filter(h => h.status === 'pending');
+            } else if (filter === 'success') {
+                filtered = state.history.filter(h => h.status === 'success');
+            } else if (filter === 'failed') {
+                filtered = state.history.filter(h => h.status === 'failed');
+            }
+
+            const pendingCount = state.history.filter(h => h.status === 'pending').length;
+            historyBadge.textContent = pendingCount;
+            pendingCountEl.textContent = pendingCount;
+
+            if (filtered.length === 0) {
+                historyList.innerHTML = `
+                    <div class="history-empty">
+                        <span class="icon">📭</span>
+                        ${state.history.length === 0 ? 'Belum ada history broadcast' : 'Tidak ada data dengan filter ini'}
+                    </div>
+                `;
+                return;
+            }
+
+            historyList.innerHTML = filtered.map((item, index) => {
+                const isPending = item.status === 'pending';
+                const isSuccess = item.status === 'success';
+                const isFailed = item.status === 'failed';
+
+                let statusIcon = '⏳';
+                let statusClass = 'pending';
+                let statusLabel = 'Pending';
+
+                if (isSuccess) {
+                    statusIcon = '✅';
+                    statusClass = 'success';
+                    statusLabel = 'Terkirim';
+                } else if (isFailed) {
+                    statusIcon = '❌';
+                    statusClass = 'failed';
+                    statusLabel = 'Gagal';
+                }
+
+                const timeStr = item.timestamp ? new Date(item.timestamp).toLocaleString('id-ID') : '-';
+
+                return `
+                    <div class="history-item">
+                        <span class="status-icon ${statusClass}">${statusIcon}</span>
+                        <div class="info">
+                            <div class="name">${escapeHtml(item.name)}</div>
+                            <div class="detail">
+                                ${escapeHtml(item.phone)}
+                                <span class="status-badge ${statusClass}">${statusLabel}</span>
+                            </div>
+                        </div>
+                        <div class="time">${timeStr}</div>
+                        ${isPending ? `
+                            <button class="action-btn confirm" onclick="confirmHistoryItem(${index})">✅ Confirm</button>
+                            <button class="action-btn fail" onclick="failHistoryItem(${index})">❌</button>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateStats() {
+            const sent = state.history.filter(h => h.status === 'success').length;
+            const pending = state.history.filter(h => h.status === 'pending').length;
+            sentCountEl.textContent = sent;
+            pendingCountEl.textContent = pending;
+            historyBadge.textContent = pending;
+        }
+
+        function confirmHistoryItem(index) {
+            const item = state.history[index];
+            if (!item || item.status !== 'pending') return;
+
+            if (confirm(`✅ Konfirmasi: "${item.name}" - Pesan berhasil terkirim?`)) {
+                item.status = 'success';
+                item.confirmed_at = new Date().toISOString();
+                saveHistory();
+                showToast(`✅ ${item.name} dikonfirmasi terkirim`, 'success');
+            }
+        }
+
+        function failHistoryItem(index) {
+            const item = state.history[index];
+            if (!item || item.status !== 'pending') return;
+
+            if (confirm(`❌ Konfirmasi: "${item.name}" - Pesan gagal terkirim?`)) {
+                item.status = 'failed';
+                item.confirmed_at = new Date().toISOString();
+                saveHistory();
+                showToast(`❌ ${item.name} ditandai gagal`, 'error');
+            }
+        }
+
+        function clearHistory() {
+            if (state.history.length === 0) {
+                showToast('📭 Tidak ada history untuk dihapus', 'warning');
+                return;
+            }
+            if (!confirm(`Hapus semua ${state.history.length} data history?`)) return;
+            state.history = [];
+            saveHistory();
+            showToast('🗑️ History berhasil dihapus', 'info');
+        }
+
+        // ================================================================
         // ========== SEND BROADCAST ==========
         // ================================================================
+        let sendAbort = false;
+
         async function sendBroadcast() {
             if (state.isSending) {
                 showToast('⏳ Broadcast sedang berjalan...', 'warning');
@@ -1180,13 +1701,21 @@
                 return;
             }
 
-            // Konfirmasi
-            const confirmMsg = `📤 Kirim broadcast ke ${state.contacts.length} kontak?\n\nPesan akan dibuka di tab baru WhatsApp.\nAnda harus mengirim secara manual.`;
+            // Cek apakah ada history pending dari sebelumnya
+            const pendingHistory = state.history.filter(h => h.status === 'pending');
+            if (pendingHistory.length > 0) {
+                if (!confirm(`⏳ Ada ${pendingHistory.length} data pending belum dikonfirmasi.\n\nLanjutkan broadcast?`)) {
+                    return;
+                }
+            }
+
+            const total = state.contacts.length;
+            const confirmMsg = `📤 Kirim broadcast ke ${total} kontak?\n\nPesan akan dibuka satu per satu dengan konfirmasi.`;
             if (!confirm(confirmMsg)) return;
 
             state.isSending = true;
-            state.sentCount = 0;
-            sentCountEl.textContent = '0';
+            state.currentIndex = 0;
+            sendAbort = false;
 
             // Tampilkan progress
             progressContainer.classList.add('active');
@@ -1194,25 +1723,22 @@
             progressPercent.textContent = '0%';
             progressText.textContent = 'Memulai...';
 
-            const total = state.contacts.length;
+            const btn = $('sendBroadcastBtn');
+            btn.disabled = true;
+            btn.textContent = '⏳ Mengirim...';
+
+            // Reset kontak status
+            state.contacts.forEach(c => c.status = 'pending');
 
             for (let i = 0; i < total; i++) {
+                if (sendAbort) {
+                    progressText.textContent = '⏹️ Dihentikan oleh user';
+                    showToast('⏹️ Broadcast dihentikan', 'warning');
+                    break;
+                }
+
+                state.currentIndex = i;
                 const contact = state.contacts[i];
-                let personalMessage = message
-                    .replace(/{nama}/g, contact.name)
-                    .replace(/{phone}/g, contact.phone)
-                    .replace(/{index}/g, i + 1)
-                    .replace(/{total}/g, total);
-
-                // Buat URL WhatsApp
-                const phone = contact.phone.replace('+', '');
-                const url = `https://wa.me/${phone}?text=${encodeURIComponent(personalMessage)}`;
-
-                // Buka tab baru
-                window.open(url, '_blank');
-
-                state.sentCount++;
-                sentCountEl.textContent = state.sentCount;
 
                 // Update progress
                 const percent = Math.round(((i + 1) / total) * 100);
@@ -1220,28 +1746,136 @@
                 progressPercent.textContent = percent + '%';
                 progressText.textContent = `Mengirim ke ${i + 1}/${total} - ${contact.name}`;
 
-                // Delay antar kirim
-                await new Promise(r => setTimeout(r, 300));
+                // Personalisasi pesan
+                let personalMessage = message
+                    .replace(/{nama}/g, contact.name)
+                    .replace(/{phone}/g, contact.phone)
+                    .replace(/{index}/g, i + 1)
+                    .replace(/{total}/g, total);
+
+                // Tambahkan ke history dengan status pending
+                const historyItem = {
+                    id: Date.now() + '_' + i,
+                    name: contact.name,
+                    phone: contact.phone,
+                    message: personalMessage,
+                    status: 'pending',
+                    timestamp: new Date().toISOString(),
+                    index: i + 1,
+                    total: total
+                };
+                state.history.push(historyItem);
+
+                // Buka WhatsApp
+                const phone = contact.phone.replace('+', '');
+                const url = `https://wa.me/${phone}?text=${encodeURIComponent(personalMessage)}`;
+                window.open(url, '_blank');
+
+                // Tampilkan modal konfirmasi
+                const confirmed = await showConfirmModal(contact.name, contact.phone, i + 1, total);
+
+                if (confirmed === 'stop') {
+                    sendAbort = true;
+                    historyItem.status = 'pending';
+                    showToast('⏹️ Broadcast dihentikan', 'warning');
+                    break;
+                } else if (confirmed === 'success') {
+                    historyItem.status = 'success';
+                    historyItem.confirmed_at = new Date().toISOString();
+                    showToast(`✅ ${contact.name} - Berhasil terkirim`, 'success');
+                } else if (confirmed === 'failed') {
+                    historyItem.status = 'failed';
+                    historyItem.confirmed_at = new Date().toISOString();
+                    showToast(`❌ ${contact.name} - Gagal terkirim`, 'error');
+                }
+
+                // Save history after each item
+                saveHistory();
+
+                // Small delay
+                await new Promise(r => setTimeout(r, 200));
             }
 
-            progressText.textContent = '✅ Selesai!';
-            showToast(`✅ Broadcast selesai! ${state.sentCount} pesan dibuka.`, 'success');
+            // Selesai
+            progressFill.style.width = '100%';
+            progressPercent.textContent = '100%';
+            progressText.textContent = sendAbort ? '⏹️ Broadcast dihentikan' : '✅ Broadcast selesai!';
+
+            if (!sendAbort) {
+                showToast(`✅ Broadcast selesai! ${state.history.filter(h => h.status === 'success').length} terkirim`, 'success');
+            }
 
             state.isSending = false;
+            btn.disabled = false;
+            btn.textContent = '📤 Kirim Broadcast';
+
             setTimeout(() => {
                 progressContainer.classList.remove('active');
             }, 3000);
+
+            renderHistory();
+            updateStats();
+        }
+
+        // ================================================================
+        // ========== CONFIRM MODAL ==========
+        // ================================================================
+        function showConfirmModal(name, phone, index, total) {
+            return new Promise((resolve) => {
+                previewName.textContent = name;
+                previewPhone.textContent = phone;
+                confirmTitle.textContent = `📤 ${index}/${total} - Kirim ke ${name}`;
+                confirmSubtitle.textContent = 'Apakah pesan berhasil terkirim?';
+
+                confirmModal.classList.add('active');
+
+                // Clean up old listeners
+                const successBtn = $('confirmSuccess');
+                const failedBtn = $('confirmFailed');
+                const stopBtn = $('confirmStop');
+
+                const newSuccess = successBtn.cloneNode(true);
+                const newFailed = failedBtn.cloneNode(true);
+                const newStop = stopBtn.cloneNode(true);
+
+                successBtn.parentNode.replaceChild(newSuccess, successBtn);
+                failedBtn.parentNode.replaceChild(newFailed, failedBtn);
+                stopBtn.parentNode.replaceChild(newStop, stopBtn);
+
+                const freshSuccess = $('confirmSuccess');
+                const freshFailed = $('confirmFailed');
+                const freshStop = $('confirmStop');
+
+                freshSuccess.onclick = () => {
+                    confirmModal.classList.remove('active');
+                    resolve('success');
+                };
+
+                freshFailed.onclick = () => {
+                    confirmModal.classList.remove('active');
+                    resolve('failed');
+                };
+
+                freshStop.onclick = () => {
+                    if (confirm('⏹️ Hentikan broadcast? Data yang sudah terkirim akan tetap tersimpan di history.')) {
+                        confirmModal.classList.remove('active');
+                        resolve('stop');
+                    }
+                };
+            });
         }
 
         // ================================================================
         // ========== INIT ==========
         // ================================================================
         function init() {
-            // Load templates
+            // Load data
             loadTemplates();
+            loadHistory();
 
             // Setup import
             setupExcelImport();
+            setupLogoUpload();
 
             // Event listeners
             $('addManualBtn').addEventListener('click', () => {
@@ -1256,45 +1890,48 @@
                 $('manualPhone').value = '';
             });
 
-            // Enter key on phone input
             $('manualPhone').addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
                     $('addManualBtn').click();
                 }
             });
 
-            // Clear all contacts
             $('clearAllContacts').addEventListener('click', clearAllContacts);
 
-            // Template
             templateSelect.addEventListener('change', loadTemplate);
             $('saveTemplateBtn').addEventListener('click', saveTemplate);
             $('deleteTemplateBtn').addEventListener('click', deleteTemplate);
 
-            // Send broadcast
             $('sendBroadcastBtn').addEventListener('click', sendBroadcast);
 
-            // Auto format phone input
+            historyFilter.addEventListener('change', renderHistory);
+            $('clearHistoryBtn').addEventListener('click', clearHistory);
+
+            // Auto format phone
             $('manualPhone').addEventListener('input', function() {
                 this.value = this.value.replace(/[^\d]/g, '');
             });
 
             // Initial render
             renderContacts();
+            renderHistory();
+            updateStats();
 
-            console.log('✅ Broadcast WhatsApp ready!');
-            console.log(`📱 ${state.contacts.length} kontak, ${Object.keys(state.templates).length} template`);
+            console.log('✅ Broadcast WhatsApp Pro ready!');
+            console.log(`📱 ${state.contacts.length} kontak, ${Object.keys(state.templates).length} template, ${state.history.length} history`);
         }
 
-        // Run when DOM ready
         document.addEventListener('DOMContentLoaded', init);
 
         // ================================================================
-        // ========== EXPOSE GLOBAL FUNCTIONS ==========
+        // ========== EXPOSE GLOBAL ==========
         // ================================================================
         window.removeContact = removeContact;
         window.clearAllContacts = clearAllContacts;
         window.addContact = addContact;
+        window.confirmHistoryItem = confirmHistoryItem;
+        window.failHistoryItem = failHistoryItem;
+        window.clearHistory = clearHistory;
     </script>
 
 </body>
