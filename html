@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Broadcast WhatsApp</title>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+    <style>
+        /* ================================================================ */
+        /* ========== RESET & VARIABLES ========== */
+        /* ================================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --primary-light: #818cf8;
+            --success: #25D366;
+            --success-dark: #128C7E;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #1e293b;
+            --gray: #64748b;
+            --gray-light: #e2e8f0;
+            --border: #e5e7eb;
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --radius: 16px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #f5f7fb 0%, #eef2ff 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--dark);
+        }
+
+        /* ================================================================ */
+        /* ========== LAYOUT ========== */
+        /* ================================================================ */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 28px;
+            background: #fff;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .header-logo {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary), #8b5cf6);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #fff;
+            font-weight: 800;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        .header-title h1 {
+            font-size: 22px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--gray);
+            margin-top: 2px;
+        }
+
+        .header-stats {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray);
+            background: #f1f5f9;
+            padding: 6px 16px;
+            border-radius: 30px;
+        }
+
+        .stat-badge span {
+            color: var(--dark);
+            font-weight: 700;
+        }
+
+        /* ================================================================ */
+        /* ========== GRID ========== */
+        /* ================================================================ */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: all var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        }
+
+        .card-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title .badge {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 12px;
+            border-radius: 20px;
+            background: #eef2ff;
+            color: var(--primary);
+        }
+
+        /* ================================================================ */
+        /* ========== FORM ELEMENTS ========== */
+        /* ================================================================ */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 6px;
+        }
+
+        .form-group label .required {
+            color: var(--danger);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            font-size: 13px;
+            transition: all var(--transition);
+            background: #fafcff;
+            color: var(--dark);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.08);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 80px;
+            font-family: inherit;
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 36px;
+            cursor: pointer;
+        }
+
+        .input-hint {
+            font-size: 11px;
+            color: var(--gray);
+            margin-top: 4px;
+            display: block;
+        }
+
+        /* ================================================================ */
+        /* ========== DROP ZONE ========== */
+        /* ================================================================ */
+        .drop-zone {
+            border: 2px dashed var(--border);
+            border-radius: 14px;
+            padding: 32px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--transition);
+            background: #fafcff;
+            position: relative;
+        }
+
+        .drop-zone:hover {
+            border-color: var(--primary);
+            background: #f8faff;
+            transform: scale(1.01);
+        }
+
+        .drop-zone.dragover {
+            border-color: var(--primary);
+            background: #eef2ff;
+            transform: scale(1.02);
+        }
+
+        .drop-zone .icon {
+            font-size: 40px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .drop-zone .text {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray);
+        }
+
+        .drop-zone .sub-text {
+            font-size: 12px;
+            color: #9ca3af;
+            margin-top: 4px;
+        }
+
+        .drop-zone input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            background: #eef2ff;
+            border-radius: 10px;
+            margin-top: 12px;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .file-info .name {
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--dark);
+            flex: 1;
+            word-break: break-all;
+        }
+
+        .file-info .size {
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        .file-info .remove {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: var(--danger);
+            padding: 0 4px;
+            transition: transform 0.2s;
+        }
+
+        .file-info .remove:hover {
+            transform: scale(1.2);
+        }
+
+        /* ================================================================ */
+        /* ========== CONTACT LIST ========== */
+        /* ================================================================ */
+        .contact-list {
+            max-height: 260px;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: #fafcff;
+            margin-top: 4px;
+        }
+
+        .contact-list .empty {
+            padding: 30px 20px;
+            text-align: center;
+            color: #9ca3af;
+            font-size: 13px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border);
+            transition: background 0.2s;
+        }
+
+        .contact-item:last-child {
+            border-bottom: none;
+        }
+
+        .contact-item:hover {
+            background: #f1f5f9;
+        }
+
+        .contact-item .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), #8b5cf6);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .contact-item .info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .contact-item .info .name {
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--dark);
+        }
+
+        .contact-item .info .phone {
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        .contact-item .remove-btn {
+            background: none;
+            border: none;
+            font-size: 16px;
+            color: #9ca3af;
+            cursor: pointer;
+            padding: 4px;
+            transition: all 0.2s;
+            border-radius: 50%;
+        }
+
+        .contact-item .remove-btn:hover {
+            color: var(--danger);
+            background: #fef2f2;
+        }
+
+        /* ================================================================ */
+        /* ========== CONTACT COUNT ========== */
+        /* ================================================================ */
+        .contact-count {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0 6px 0;
+            font-size: 13px;
+            color: var(--gray);
+        }
+
+        .contact-count strong {
+            color: var(--dark);
+            font-weight: 700;
+        }
+
+        .contact-count .clear-btn {
+            background: none;
+            border: none;
+            color: var(--danger);
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .contact-count .clear-btn:hover {
+            background: #fef2f2;
+        }
+
+        /* ================================================================ */
+        /* ========== BUTTONS ========== */
+        /* ================================================================ */
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), #8b5cf6);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.35);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success), var(--success-dark));
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.25);
+        }
+
+        .btn-success:hover {
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.35);
+        }
+
+        .btn-outline {
+            background: #f1f5f9;
+            color: var(--dark);
+            border: 1.5px solid var(--border);
+        }
+
+        .btn-outline:hover {
+            background: #e2e8f0;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+            color: #fff;
+        }
+
+        .btn-danger:hover {
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 12px;
+            border-radius: 8px;
+        }
+
+        .btn-block {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* ================================================================ */
+        /* ========== TEMPLATE SECTION ========== */
+        /* ================================================================ */
+        .template-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .template-actions .btn {
+            padding: 6px 14px;
+            font-size: 12px;
+            border-radius: 8px;
+        }
+
+        /* ================================================================ */
+        /* ========== VARIABLE HINT ========== */
+        /* ================================================================ */
+        .variable-hint {
+            margin-top: 10px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .variable-hint summary {
+            padding: 10px 14px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--primary);
+            background: #f8faff;
+            transition: background 0.2s;
+        }
+
+        .variable-hint summary:hover {
+            background: #eef2ff;
+        }
+
+        .variable-hint .var-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px 16px;
+            padding: 12px 16px;
+            background: #fafcff;
+            font-size: 12px;
+            border-top: 1px solid var(--border);
+        }
+
+        .variable-hint .var-grid code {
+            background: #f1f5f9;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .variable-hint .var-grid .var-item {
+            padding: 4px 0;
+            color: var(--gray);
+        }
+
+        /* ================================================================ */
+        /* ========== PROGRESS ========== */
+        /* ================================================================ */
+        .progress-container {
+            margin-top: 16px;
+            display: none;
+        }
+
+        .progress-container.active {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .progress-bar-track {
+            width: 100%;
+            height: 8px;
+            background: #f1f5f9;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), #8b5cf6);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--gray);
+            margin-top: 6px;
+        }
+
+        .progress-info .percent {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* ================================================================ */
+        /* ========== TOAST / NOTIFICATION ========== */
+        /* ================================================================ */
+        #toastContainer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            pointer-events: none;
+        }
+
+        .toast {
+            pointer-events: auto;
+            padding: 12px 20px;
+            border-radius: 12px;
+            background: var(--dark);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 500;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            animation: slideInRight 0.3s ease-out;
+            max-width: 380px;
+        }
+
+        .toast.success {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .toast.error {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        .toast.warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+
+        .toast .toast-close {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.7);
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: 12px;
+            float: right;
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(100px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* ================================================================ */
+        /* ========== RESPONSIVE ========== */
+        /* ================================================================ */
+        @media (max-width: 1024px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 12px; }
+            .header { padding: 16px 20px; flex-direction: column; align-items: flex-start; }
+            .header-stats { width: 100%; justify-content: flex-start; }
+            .stat-badge { font-size: 12px; padding: 4px 12px; }
+            .card { padding: 16px; }
+            .variable-hint .var-grid { grid-template-columns: 1fr; }
+            .template-actions { flex-direction: row; }
+        }
+
+        @media (max-width: 480px) {
+            .header-title h1 { font-size: 18px; }
+            .header-logo { width: 40px; height: 40px; font-size: 18px; }
+            .stat-badge { font-size: 11px; padding: 4px 10px; }
+            .btn { font-size: 13px; padding: 8px 16px; }
+            .contact-item { padding: 8px 12px; }
+            .contact-item .avatar { width: 30px; height: 30px; font-size: 12px; }
+        }
+
+        /* ================================================================ */
+        /* ========== SCROLLBAR ========== */
+        /* ================================================================ */
+        .contact-list::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .contact-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .contact-list::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 4px;
+        }
+
+        .contact-list::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- ===== HEADER ===== -->
+        <header class="header">
+            <div class="header-left">
+                <div class="header-logo">📢</div>
+                <div class="header-title">
+                    <h1>Broadcast WhatsApp</h1>
+                    <p>Kirim pesan massal ke banyak kontak</p>
+                </div>
+            </div>
+            <div class="header-stats">
+                <div class="stat-badge">📱 Kontak: <span id="contactCountTotal">0</span></div>
+                <div class="stat-badge">📤 Terkirim: <span id="sentCount">0</span></div>
+            </div>
+        </header>
+
+        <!-- ===== GRID ===== -->
+        <div class="grid-2">
+            <!-- ===== KIRI: KONTAK ===== -->
+            <div class="card">
+                <div class="card-title">
+                    📋 Daftar Kontak
+                    <span class="badge" id="contactBadge">0</span>
+                </div>
+
+                <!-- Upload Excel -->
+                <div class="form-group">
+                    <label>📥 Import dari Excel</label>
+                    <div class="drop-zone" id="dropZone">
+                        <span class="icon">📂</span>
+                        <div class="text">Drag & drop file Excel disini</div>
+                        <div class="sub-text">atau klik untuk pilih file (.xlsx, .xls, .csv)</div>
+                        <input type="file" id="excelFile" accept=".xlsx,.xls,.csv">
+                    </div>
+                    <div id="fileInfo"></div>
+                </div>
+
+                <!-- Tambah Manual -->
+                <div class="form-group">
+                    <label>Tambah Kontak Manual</label>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <input type="text" id="manualName" class="form-control" placeholder="Nama" style="flex: 1; min-width: 100px;">
+                        <input type="tel" id="manualPhone" class="form-control" placeholder="81234567890" style="flex: 1; min-width: 120px;">
+                        <button class="btn btn-primary btn-sm" id="addManualBtn">➕ Tambah</button>
+                    </div>
+                    <span class="input-hint">Format nomor: 81234567890 (tanpa +62)</span>
+                </div>
+
+                <!-- Daftar Kontak -->
+                <div class="contact-count">
+                    <span>📱 <strong id="contactCount">0</strong> kontak</span>
+                    <button class="clear-btn" id="clearAllContacts">🗑️ Hapus Semua</button>
+                </div>
+                <div class="contact-list" id="contactList">
+                    <div class="empty">Belum ada kontak. Import Excel atau tambahkan manual.</div>
+                </div>
+            </div>
+
+            <!-- ===== KANAN: PESAN & KIRIM ===== -->
+            <div class="card">
+                <div class="card-title">✏️ Template Pesan</div>
+
+                <!-- Template Select -->
+                <div class="form-group">
+                    <label>📁 Pilih Template</label>
+                    <select class="form-control" id="templateSelect">
+                        <option value="">-- Pilih Template --</option>
+                    </select>
+                </div>
+
+                <!-- Template Actions -->
+                <div class="template-actions">
+                    <button class="btn btn-outline btn-sm" id="saveTemplateBtn">💾 Simpan Template</button>
+                    <button class="btn btn-danger btn-sm" id="deleteTemplateBtn">🗑️ Hapus Template</button>
+                </div>
+
+                <!-- Message -->
+                <div class="form-group" style="margin-top: 12px;">
+                    <label>📝 Pesan <span class="required">*</span></label>
+                    <textarea class="form-control" id="messageInput" rows="6" placeholder="Tulis pesan broadcast..."></textarea>
+                    <span class="input-hint">Gunakan <code>{nama}</code> untuk menyisipkan nama kontak</span>
+                </div>
+
+                <!-- Variable Hint -->
+                <div class="variable-hint">
+                    <details>
+                        <summary>💡 Variabel yang tersedia</summary>
+                        <div class="var-grid">
+                            <div class="var-item"><code>{nama}</code> - Nama kontak</div>
+                            <div class="var-item"><code>{phone}</code> - Nomor telepon</div>
+                            <div class="var-item"><code>{index}</code> - Nomor urut (1,2,3...)</div>
+                            <div class="var-item"><code>{total}</code> - Total kontak</div>
+                        </div>
+                    </details>
+                </div>
+
+                <!-- Kirim -->
+                <div style="margin-top: 16px;">
+                    <button class="btn btn-success btn-block" id="sendBroadcastBtn">
+                        📤 Kirim Broadcast
+                    </button>
+                    <div style="margin-top: 8px; font-size: 12px; color: var(--gray); text-align: center;">
+                        ⚠️ Setiap klik akan membuka chat WhatsApp di tab baru. Kirim secara manual.
+                    </div>
+                </div>
+
+                <!-- Progress -->
+                <div class="progress-container" id="progressContainer">
+                    <div class="progress-bar-track">
+                        <div class="progress-bar-fill" id="progressFill"></div>
+                    </div>
+                    <div class="progress-info">
+                        <span id="progressText">Memproses...</span>
+                        <span class="percent" id="progressPercent">0%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== TOAST CONTAINER ===== -->
+    <div id="toastContainer"></div>
+
+    <script>
+        // ================================================================
+        // ========== STATE ==========
+        // ================================================================
+        const state = {
+            contacts: [],
+            sentCount: 0,
+            isSending: false,
+            templates: {},
+        };
+
+        // ================================================================
+        // ========== DOM REFS ==========
+        // ================================================================
+        const $ = (id) => document.getElementById(id);
+        const contactList = $('contactList');
+        const contactCount = $('contactCount');
+        const contactCountTotal = $('contactCountTotal');
+        const contactBadge = $('contactBadge');
+        const sentCountEl = $('sentCount');
+        const messageInput = $('messageInput');
+        const templateSelect = $('templateSelect');
+        const progressContainer = $('progressContainer');
+        const progressFill = $('progressFill');
+        const progressText = $('progressText');
+        const progressPercent = $('progressPercent');
+        const fileInfo = $('fileInfo');
+
+        // ================================================================
+        // ========== TOAST ==========
+        // ================================================================
+        function showToast(message, type = 'info', duration = 3000) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                ${message}
+                <button class="toast-close" onclick="this.parentElement.remove()">✕</button>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => {
+                if (toast.parentElement) toast.remove();
+            }, duration);
+        }
+
+        // ================================================================
+        // ========== CONTACT FUNCTIONS ==========
+        // ================================================================
+        function formatPhone(phone) {
+            let clean = String(phone).replace(/[^\d]/g, '');
+            if (clean.startsWith('0')) clean = clean.substring(1);
+            if (!clean.startsWith('62')) clean = '62' + clean;
+            return '+' + clean;
+        }
+
+        function isValidPhone(phone) {
+            const clean = String(phone).replace(/[^\d]/g, '');
+            return clean.length >= 10 && clean.length <= 15;
+        }
+
+        function addContact(name, phone) {
+            const formatted = formatPhone(phone);
+            if (!isValidPhone(phone)) {
+                showToast('⚠️ Nomor tidak valid! Minimal 10 digit.', 'error');
+                return false;
+            }
+
+            // Cek duplikat
+            if (state.contacts.some(c => c.phone === formatted)) {
+                showToast(`⚠️ Nomor ${formatted} sudah ada!`, 'warning');
+                return false;
+            }
+
+            state.contacts.push({
+                id: Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+                name: name.trim() || 'Kontak',
+                phone: formatted
+            });
+
+            renderContacts();
+            showToast(`✅ ${name || 'Kontak'} berhasil ditambahkan`, 'success');
+            return true;
+        }
+
+        function removeContact(id) {
+            if (!confirm('Hapus kontak ini?')) return;
+            state.contacts = state.contacts.filter(c => c.id !== id);
+            renderContacts();
+            showToast('🗑️ Kontak dihapus', 'info');
+        }
+
+        function clearAllContacts() {
+            if (state.contacts.length === 0) return;
+            if (!confirm(`Hapus semua ${state.contacts.length} kontak?`)) return;
+            state.contacts = [];
+            renderContacts();
+            showToast('🗑️ Semua kontak dihapus', 'info');
+        }
+
+        function renderContacts() {
+            const count = state.contacts.length;
+            contactCount.textContent = count;
+            contactCountTotal.textContent = count;
+            contactBadge.textContent = count;
+
+            if (count === 0) {
+                contactList.innerHTML = `<div class="empty">Belum ada kontak. Import Excel atau tambahkan manual.</div>`;
+                return;
+            }
+
+            contactList.innerHTML = state.contacts.map((c, i) => `
+                <div class="contact-item">
+                    <div class="avatar">${c.name.charAt(0).toUpperCase()}</div>
+                    <div class="info">
+                        <div class="name">${escapeHtml(c.name)}</div>
+                        <div class="phone">${escapeHtml(c.phone)}</div>
+                    </div>
+                    <button class="remove-btn" onclick="removeContact('${c.id}')" title="Hapus">✕</button>
+                </div>
+            `).join('');
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // ================================================================
+        // ========== IMPORT EXCEL ==========
+        // ================================================================
+        function setupExcelImport() {
+            const dropZone = $('dropZone');
+            const fileInput = $('excelFile');
+
+            // Click to select file
+            dropZone.addEventListener('click', () => fileInput.click());
+
+            // Drag and drop
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('dragover');
+            });
+
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('dragover');
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+                if (e.dataTransfer.files.length > 0) {
+                    fileInput.files = e.dataTransfer.files;
+                    handleExcelFile(fileInput.files[0]);
+                }
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    handleExcelFile(e.target.files[0]);
+                }
+            });
+        }
+
+        function handleExcelFile(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const json = XLSX.utils.sheet_to_json(sheet, { defval: '' });
+
+                    if (!json || json.length === 0) {
+                        showToast('⚠️ File Excel kosong!', 'error');
+                        return;
+                    }
+
+                    // Cari kolom nama dan nomor
+                    const headers = Object.keys(json[0]);
+                    let nameCol = headers.find(h => /nama|name|Nama|Name/i.test(h));
+                    let phoneCol = headers.find(h => /hp|phone|nomor|no|telepon|Phone|HP|No|Telepon/i.test(h));
+
+                    if (!phoneCol) {
+                        showToast('⚠️ Kolom nomor tidak ditemukan! Pastikan ada kolom "HP" atau "Phone".', 'error');
+                        return;
+                    }
+
+                    let added = 0;
+                    let skipped = 0;
+                    let name = nameCol || 'Nama';
+
+                    json.forEach(row => {
+                        const phone = String(row[phoneCol] || '').replace(/[^\d]/g, '');
+                        const nama = String(row[name] || '').trim() || `Kontak ${added + 1}`;
+
+                        if (phone && phone.length >= 10) {
+                            const formatted = formatPhone(phone);
+                            if (!state.contacts.some(c => c.phone === formatted)) {
+                                state.contacts.push({
+                                    id: Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+                                    name: nama || 'Kontak',
+                                    phone: formatted
+                                });
+                                added++;
+                            } else {
+                                skipped++;
+                            }
+                        } else {
+                            skipped++;
+                        }
+                    });
+
+                    renderContacts();
+                    showToast(`✅ Import selesai! ${added} kontak ditambahkan, ${skipped} dilewati.`, 'success');
+
+                    // Update file info
+                    const fileSize = (file.size / 1024).toFixed(1);
+                    fileInfo.innerHTML = `
+                        <div class="file-info">
+                            <span>📄</span>
+                            <span class="name">${escapeHtml(file.name)}</span>
+                            <span class="size">${fileSize} KB</span>
+                            <button class="remove" onclick="fileInfo.innerHTML=''; document.getElementById('excelFile').value='';">✕</button>
+                        </div>
+                    `;
+
+                } catch (err) {
+                    console.error(err);
+                    showToast('❌ Gagal membaca file: ' + err.message, 'error');
+                }
+            };
+
+            reader.readAsArrayBuffer(file);
+        }
+
+        // ================================================================
+        // ========== TEMPLATE FUNCTIONS ==========
+        // ================================================================
+        const TEMPLATE_STORAGE_KEY = 'broadcast_templates_v2';
+
+        function loadTemplates() {
+            try {
+                const saved = localStorage.getItem(TEMPLATE_STORAGE_KEY);
+                state.templates = saved ? JSON.parse(saved) : {};
+            } catch (e) {
+                state.templates = {};
+            }
+            renderTemplateSelect();
+        }
+
+        function saveTemplate() {
+            const message = messageInput.value.trim();
+            if (!message) {
+                showToast('⚠️ Tulis pesan terlebih dahulu!', 'error');
+                return;
+            }
+
+            const name = prompt('Nama template:');
+            if (!name || name.trim() === '') {
+                showToast('⚠️ Nama template tidak boleh kosong!', 'error');
+                return;
+            }
+
+            const key = name.trim().toLowerCase().replace(/\s/g, '_');
+            state.templates[key] = {
+                name: name.trim(),
+                message: message
+            };
+
+            localStorage.setItem(TEMPLATE_STORAGE_KEY, JSON.stringify(state.templates));
+            renderTemplateSelect();
+            templateSelect.value = key;
+            showToast(`✅ Template "${name}" berhasil disimpan!`, 'success');
+        }
+
+        function deleteTemplate() {
+            const key = templateSelect.value;
+            if (!key) {
+                showToast('⚠️ Pilih template yang akan dihapus!', 'warning');
+                return;
+            }
+
+            if (!state.templates[key]) {
+                showToast('⚠️ Template tidak ditemukan!', 'error');
+                return;
+            }
+
+            if (!confirm(`Hapus template "${state.templates[key].name}"?`)) return;
+
+            delete state.templates[key];
+            localStorage.setItem(TEMPLATE_STORAGE_KEY, JSON.stringify(state.templates));
+            renderTemplateSelect();
+            messageInput.value = '';
+            showToast('🗑️ Template berhasil dihapus', 'info');
+        }
+
+        function renderTemplateSelect() {
+            const keys = Object.keys(state.templates);
+            templateSelect.innerHTML = '<option value="">-- Pilih Template --</option>';
+
+            keys.forEach(key => {
+                const opt = document.createElement('option');
+                opt.value = key;
+                opt.textContent = state.templates[key].name;
+                templateSelect.appendChild(opt);
+            });
+        }
+
+        function loadTemplate() {
+            const key = templateSelect.value;
+            if (!key || !state.templates[key]) {
+                messageInput.value = '';
+                return;
+            }
+            messageInput.value = state.templates[key].message;
+        }
+
+        // ================================================================
+        // ========== SEND BROADCAST ==========
+        // ================================================================
+        async function sendBroadcast() {
+            if (state.isSending) {
+                showToast('⏳ Broadcast sedang berjalan...', 'warning');
+                return;
+            }
+
+            const message = messageInput.value.trim();
+            if (!message) {
+                showToast('⚠️ Pesan tidak boleh kosong!', 'error');
+                return;
+            }
+
+            if (state.contacts.length === 0) {
+                showToast('⚠️ Tidak ada kontak! Tambahkan kontak terlebih dahulu.', 'error');
+                return;
+            }
+
+            // Konfirmasi
+            const confirmMsg = `📤 Kirim broadcast ke ${state.contacts.length} kontak?\n\nPesan akan dibuka di tab baru WhatsApp.\nAnda harus mengirim secara manual.`;
+            if (!confirm(confirmMsg)) return;
+
+            state.isSending = true;
+            state.sentCount = 0;
+            sentCountEl.textContent = '0';
+
+            // Tampilkan progress
+            progressContainer.classList.add('active');
+            progressFill.style.width = '0%';
+            progressPercent.textContent = '0%';
+            progressText.textContent = 'Memulai...';
+
+            const total = state.contacts.length;
+
+            for (let i = 0; i < total; i++) {
+                const contact = state.contacts[i];
+                let personalMessage = message
+                    .replace(/{nama}/g, contact.name)
+                    .replace(/{phone}/g, contact.phone)
+                    .replace(/{index}/g, i + 1)
+                    .replace(/{total}/g, total);
+
+                // Buat URL WhatsApp
+                const phone = contact.phone.replace('+', '');
+                const url = `https://wa.me/${phone}?text=${encodeURIComponent(personalMessage)}`;
+
+                // Buka tab baru
+                window.open(url, '_blank');
+
+                state.sentCount++;
+                sentCountEl.textContent = state.sentCount;
+
+                // Update progress
+                const percent = Math.round(((i + 1) / total) * 100);
+                progressFill.style.width = percent + '%';
+                progressPercent.textContent = percent + '%';
+                progressText.textContent = `Mengirim ke ${i + 1}/${total} - ${contact.name}`;
+
+                // Delay antar kirim
+                await new Promise(r => setTimeout(r, 300));
+            }
+
+            progressText.textContent = '✅ Selesai!';
+            showToast(`✅ Broadcast selesai! ${state.sentCount} pesan dibuka.`, 'success');
+
+            state.isSending = false;
+            setTimeout(() => {
+                progressContainer.classList.remove('active');
+            }, 3000);
+        }
+
+        // ================================================================
+        // ========== INIT ==========
+        // ================================================================
+        function init() {
+            // Load templates
+            loadTemplates();
+
+            // Setup import
+            setupExcelImport();
+
+            // Event listeners
+            $('addManualBtn').addEventListener('click', () => {
+                const name = $('manualName').value.trim();
+                const phone = $('manualPhone').value.trim();
+                if (!phone) {
+                    showToast('⚠️ Masukkan nomor telepon!', 'error');
+                    return;
+                }
+                addContact(name || 'Kontak', phone);
+                $('manualName').value = '';
+                $('manualPhone').value = '';
+            });
+
+            // Enter key on phone input
+            $('manualPhone').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    $('addManualBtn').click();
+                }
+            });
+
+            // Clear all contacts
+            $('clearAllContacts').addEventListener('click', clearAllContacts);
+
+            // Template
+            templateSelect.addEventListener('change', loadTemplate);
+            $('saveTemplateBtn').addEventListener('click', saveTemplate);
+            $('deleteTemplateBtn').addEventListener('click', deleteTemplate);
+
+            // Send broadcast
+            $('sendBroadcastBtn').addEventListener('click', sendBroadcast);
+
+            // Auto format phone input
+            $('manualPhone').addEventListener('input', function() {
+                this.value = this.value.replace(/[^\d]/g, '');
+            });
+
+            // Initial render
+            renderContacts();
+
+            console.log('✅ Broadcast WhatsApp ready!');
+            console.log(`📱 ${state.contacts.length} kontak, ${Object.keys(state.templates).length} template`);
+        }
+
+        // Run when DOM ready
+        document.addEventListener('DOMContentLoaded', init);
+
+        // ================================================================
+        // ========== EXPOSE GLOBAL FUNCTIONS ==========
+        // ================================================================
+        window.removeContact = removeContact;
+        window.clearAllContacts = clearAllContacts;
+        window.addContact = addContact;
+    </script>
+
+</body>
+</html>
