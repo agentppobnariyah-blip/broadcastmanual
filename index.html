@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Broadcast WhatsApp Pro - With Image</title>
+    <title>Broadcast WhatsApp Pro</title>
     <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
     <style>
         /* ================================================================ */
@@ -328,69 +328,6 @@
             padding: 0 4px;
         }
 
-        /* ===== IMAGE UPLOAD ===== */
-        .image-upload-area {
-            border: 2px dashed var(--border);
-            border-radius: 12px;
-            padding: 16px;
-            text-align: center;
-            cursor: pointer;
-            transition: all var(--transition);
-            background: #fafcff;
-            position: relative;
-            min-height: 100px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-        }
-
-        .image-upload-area:hover {
-            border-color: var(--primary);
-            background: #f8faff;
-        }
-
-        .image-upload-area.dragover {
-            border-color: var(--primary);
-            background: #eef2ff;
-        }
-
-        .image-upload-area img {
-            max-width: 100%;
-            max-height: 180px;
-            border-radius: 8px;
-            object-fit: contain;
-        }
-
-        .image-upload-area .placeholder {
-            color: #9ca3af;
-            font-size: 13px;
-        }
-
-        .image-upload-area .placeholder .icon {
-            font-size: 32px;
-            display: block;
-            margin-bottom: 4px;
-        }
-
-        .image-upload-area input[type="file"] {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            cursor: pointer;
-        }
-
-        .image-preview-actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 8px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
         /* ===== CONTACT LIST ===== */
         .contact-list {
             max-height: 180px;
@@ -453,6 +390,12 @@
         .contact-item .info .phone {
             font-size: 11px;
             color: var(--gray);
+        }
+
+        .contact-item .info .extra {
+            font-size: 10px;
+            color: #9ca3af;
+            margin-top: 1px;
         }
 
         .contact-item .remove-btn {
@@ -558,11 +501,6 @@
 
         .btn-danger:hover {
             box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
-        }
-
-        .btn-warning {
-            background: linear-gradient(135deg, var(--warning), #d97706);
-            color: #fff;
         }
 
         .btn-sm {
@@ -778,11 +716,6 @@
             color: white;
         }
 
-        .history-item .action-btn.confirm:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
         .history-item .action-btn.fail {
             background: #ef4444;
             color: white;
@@ -824,7 +757,7 @@
             background: #fff;
             border-radius: 20px;
             padding: 28px 32px;
-            max-width: 440px;
+            max-width: 420px;
             width: 90%;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             animation: modalPop 0.3s ease-out;
@@ -873,18 +806,18 @@
             color: var(--gray);
         }
 
-        .modal-box .image-preview-mini {
-            margin: 10px 0;
-            text-align: center;
-            padding: 8px;
-            background: #f1f5f9;
+        .modal-box .warning-box {
+            font-size: 12px;
+            color: var(--gray);
+            margin-bottom: 12px;
+            padding: 8px 12px;
+            background: #fef3c7;
             border-radius: 8px;
-            border: 1px solid var(--border);
+            border-left: 3px solid var(--warning);
         }
 
-        .modal-box .image-preview-mini img {
-            max-height: 100px;
-            border-radius: 6px;
+        .modal-box .warning-box strong {
+            color: #92400e;
         }
 
         .modal-box .modal-actions {
@@ -1053,7 +986,7 @@
                 </div>
                 <div class="header-title">
                     <h1>Broadcast WhatsApp Pro</h1>
-                    <p>Dengan gambar & variabel dinamis dari Excel</p>
+                    <p>Kirim pesan massal dengan konfirmasi per kontak</p>
                 </div>
             </div>
             <div class="header-stats">
@@ -1112,35 +1045,11 @@
                 </div>
             </div>
 
-            <!-- ===== KOLOM 2: PESAN & GAMBAR ===== -->
+            <!-- ===== KOLOM 2: PESAN & KIRIM ===== -->
             <div class="card">
                 <div class="card-title">
                     ✏️ Template Pesan
-                    <span class="badge" id="imageBadge">📷</span>
-                </div>
-
-                <!-- Upload Gambar -->
-                <div class="form-group">
-                    <label>🖼️ Upload Gambar (Opsional)</label>
-                    <div class="image-upload-area" id="imageDropZone">
-                        <div class="placeholder" id="imagePlaceholder">
-                            <span class="icon">🖼️</span>
-                            <span>Klik atau drag untuk upload gambar</span>
-                            <span style="font-size: 11px; color: #9ca3af;">JPG, PNG, GIF - Max 5MB</span>
-                        </div>
-                        <input type="file" id="imageInput" accept="image/*">
-                        <div id="imagePreview" style="display:none; width:100%;">
-                            <img id="previewImage" src="" alt="Preview">
-                            <div class="image-preview-actions">
-                                <button class="btn btn-success btn-sm" id="uploadImageToServerBtn">📤 Upload ke Server</button>
-                                <button class="btn btn-danger btn-sm" id="removeImageBtn">🗑️ Hapus Gambar</button>
-                            </div>
-                            <div id="imageUrlResult" style="display:none; margin-top: 6px; padding: 6px 10px; background: #d1fae5; border-radius: 6px; font-size: 11px;">
-                                ✅ Gambar siap: <span id="imageUrlText" style="font-weight: 600; color: #065f46;"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <span class="input-hint">Upload gambar ke server untuk mendapatkan link</span>
+                    <span class="badge" id="templateBadge">📝</span>
                 </div>
 
                 <!-- Template Select -->
@@ -1244,13 +1153,8 @@
                 <div class="name" id="previewName">Nama Kontak</div>
                 <div class="phone" id="previewPhone">+6281234567890</div>
             </div>
-            <div id="modalImagePreview" style="display:none; margin: 10px 0; text-align: center; padding: 8px; background: #f1f5f9; border-radius: 8px; border: 1px solid var(--border);">
-                <img id="modalPreviewImage" src="" alt="Gambar" style="max-height:100px; border-radius:6px;">
-                <div style="font-size:11px; color:var(--gray); margin-top:4px;">📷 Gambar akan dikirim</div>
-            </div>
-            <div style="font-size: 12px; color: var(--gray); margin-bottom: 12px; padding: 8px 12px; background: #fef3c7; border-radius: 8px; border-left: 3px solid var(--warning);">
+            <div class="warning-box">
                 ⚠️ <strong>Pastikan pesan sudah terkirim</strong> sebelum melanjutkan ke kontak berikutnya.
-                <br><span style="font-size:11px;">📷 Untuk gambar: Klik ikon lampiran 📎 → Pilih Galeri → Pilih gambar</span>
             </div>
             <div class="modal-actions">
                 <button class="btn btn-success" id="confirmSuccess">✅ Berhasil Terkirim</button>
@@ -1274,10 +1178,6 @@
             isSending: false,
             currentIndex: 0,
             templates: {},
-            pendingHistory: [],
-            logo: null,
-            imageData: null,
-            imageUrl: null,
             excelColumns: [],
             excelData: [],
         };
@@ -1310,15 +1210,6 @@
         const excelColumns = $('excelColumns');
         const columnList = $('columnList');
         const variableGrid = $('variableGrid');
-        const imageDropZone = $('imageDropZone');
-        const imageInput = $('imageInput');
-        const imagePreview = $('imagePreview');
-        const previewImage = $('previewImage');
-        const imagePlaceholder = $('imagePlaceholder');
-        const imageUrlResult = $('imageUrlResult');
-        const imageUrlText = $('imageUrlText');
-        const modalImagePreview = $('modalImagePreview');
-        const modalPreviewImage = $('modalPreviewImage');
 
         // ================================================================
         // ========== TOAST ==========
@@ -1357,126 +1248,11 @@
                         img.style.height = '100%';
                         img.style.objectFit = 'cover';
                         logoContainer.appendChild(img);
-                        state.logo = ev.target.result;
                         showToast('✅ Logo berhasil diupload!', 'success');
                     };
                     reader.readAsDataURL(file);
                 }
             });
-        }
-
-        // ================================================================
-        // ========== IMAGE UPLOAD & SERVER ==========
-        // ================================================================
-        function setupImageUpload() {
-            const dropZone = imageDropZone;
-            const input = imageInput;
-
-            // Click to upload
-            dropZone.addEventListener('click', (e) => {
-                if (e.target.closest('.image-preview-actions')) return;
-                input.click();
-            });
-
-            // Drag and drop
-            dropZone.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                dropZone.classList.add('dragover');
-            });
-
-            dropZone.addEventListener('dragleave', () => {
-                dropZone.classList.remove('dragover');
-            });
-
-            dropZone.addEventListener('drop', (e) => {
-                e.preventDefault();
-                dropZone.classList.remove('dragover');
-                if (e.dataTransfer.files.length > 0) {
-                    handleImageFile(e.dataTransfer.files[0]);
-                }
-            });
-
-            input.addEventListener('change', (e) => {
-                if (e.target.files.length > 0) {
-                    handleImageFile(e.target.files[0]);
-                }
-            });
-
-            // Remove image
-            $('removeImageBtn').addEventListener('click', () => {
-                removeImage();
-            });
-
-            // Upload to server (simulasi)
-            $('uploadImageToServerBtn').addEventListener('click', uploadImageToServer);
-        }
-
-        function handleImageFile(file) {
-            if (!file.type.startsWith('image/')) {
-                showToast('⚠️ File harus berupa gambar!', 'error');
-                return;
-            }
-
-            if (file.size > 5 * 1024 * 1024) {
-                showToast('⚠️ Ukuran gambar maksimal 5MB!', 'error');
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                state.imageData = e.target.result;
-                previewImage.src = e.target.result;
-                imagePreview.style.display = 'block';
-                imagePlaceholder.style.display = 'none';
-                imageUrlResult.style.display = 'none';
-                showToast('✅ Gambar berhasil diupload! Klik "Upload ke Server" untuk mendapatkan link.', 'success');
-            };
-            reader.readAsDataURL(file);
-        }
-
-        // Simulasi upload ke server (menggunakan base64 sebagai fallback)
-        function uploadImageToServer() {
-            if (!state.imageData) {
-                showToast('⚠️ Upload gambar terlebih dahulu!', 'error');
-                return;
-            }
-
-            const btn = $('uploadImageToServerBtn');
-            btn.disabled = true;
-            btn.textContent = '⏳ Uploading...';
-
-            // Simulasi upload delay
-            setTimeout(() => {
-                // Untuk demo, kita gunakan base64 sebagai link
-                // Di produksi, upload ke server dan dapatkan URL
-                const fakeUrl = state.imageData; // Base64 sebagai fallback
-
-                state.imageUrl = fakeUrl;
-                imageUrlResult.style.display = 'block';
-
-                // Potong URL untuk tampilan
-                const shortUrl = fakeUrl.substring(0, 30) + '... (base64)';
-                imageUrlText.textContent = '✅ Gambar siap digunakan';
-
-                showToast('✅ Gambar siap dikirim!', 'success');
-                btn.disabled = false;
-                btn.textContent = '📤 Upload ke Server';
-
-                // Catatan: WhatsApp tidak mendukung base64 image di URL
-                // Untuk produksi, upload ke server dan gunakan link publik
-                showToast('📌 Catatan: Untuk kirim gambar, upload ke server (imgbb, cloudinary, dll)', 'warning', 5000);
-
-            }, 1500);
-        }
-
-        function removeImage() {
-            state.imageData = null;
-            state.imageUrl = null;
-            imagePreview.style.display = 'none';
-            imagePlaceholder.style.display = 'block';
-            imageUrlResult.style.display = 'none';
-            imageInput.value = '';
-            showToast('🗑️ Gambar dihapus', 'info');
         }
 
         // ================================================================
@@ -1545,18 +1321,21 @@
                 return;
             }
 
-            contactList.innerHTML = state.contacts.map((c, i) => `
-                <div class="contact-item">
-                    <div class="avatar">${c.name.charAt(0).toUpperCase()}</div>
-                    <div class="info">
-                        <div class="name">${escapeHtml(c.name)}</div>
-                        <div class="phone">${escapeHtml(c.phone)}</div>
-                        ${c.extra && Object.keys(c.extra).length > 0 ? 
-                            `<div style="font-size: 10px; color: #9ca3af;">${Object.keys(c.extra).map(k => `${k}: ${c.extra[k]}`).join(', ')}</div>` : ''}
+            contactList.innerHTML = state.contacts.map((c) => {
+                const extraHtml = c.extra && Object.keys(c.extra).length > 0 ?
+                    `<div class="extra">${Object.keys(c.extra).map(k => `${k}: ${c.extra[k]}`).join(', ')}</div>` : '';
+                return `
+                    <div class="contact-item">
+                        <div class="avatar">${c.name.charAt(0).toUpperCase()}</div>
+                        <div class="info">
+                            <div class="name">${escapeHtml(c.name)}</div>
+                            <div class="phone">${escapeHtml(c.phone)}</div>
+                            ${extraHtml}
+                        </div>
+                        <button class="remove-btn" onclick="removeContact('${c.id}')" title="Hapus">✕</button>
                     </div>
-                    <button class="remove-btn" onclick="removeContact('${c.id}')" title="Hapus">✕</button>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         function escapeHtml(text) {
@@ -1736,7 +1515,6 @@
                 return;
             }
 
-            const hasImage = state.imageData !== null;
             const name = prompt('Nama template:');
             if (!name || name.trim() === '') {
                 showToast('⚠️ Nama template tidak boleh kosong!', 'error');
@@ -1746,10 +1524,7 @@
             const key = name.trim().toLowerCase().replace(/\s/g, '_');
             state.templates[key] = {
                 name: name.trim(),
-                message: message,
-                hasImage: hasImage,
-                image: state.imageData || null,
-                imageUrl: state.imageUrl || null
+                message: message
             };
 
             localStorage.setItem(TEMPLATE_STORAGE_KEY, JSON.stringify(state.templates));
@@ -1786,8 +1561,7 @@
             keys.forEach(key => {
                 const opt = document.createElement('option');
                 opt.value = key;
-                const hasImage = state.templates[key].hasImage ? ' 📷' : '';
-                opt.textContent = state.templates[key].name + hasImage;
+                opt.textContent = state.templates[key].name;
                 templateSelect.appendChild(opt);
             });
         }
@@ -1798,28 +1572,7 @@
                 messageInput.value = '';
                 return;
             }
-
-            const template = state.templates[key];
-            messageInput.value = template.message;
-
-            if (template.hasImage && template.image) {
-                state.imageData = template.image;
-                state.imageUrl = template.imageUrl || null;
-                previewImage.src = template.image;
-                imagePreview.style.display = 'block';
-                imagePlaceholder.style.display = 'none';
-
-                if (state.imageUrl) {
-                    imageUrlResult.style.display = 'block';
-                    imageUrlText.textContent = '✅ Gambar siap digunakan';
-                } else {
-                    imageUrlResult.style.display = 'none';
-                }
-
-                showToast(`📷 Template "${template.name}" memiliki gambar`, 'info');
-            } else {
-                removeImage();
-            }
+            messageInput.value = state.templates[key].message;
         }
 
         // ================================================================
@@ -1893,13 +1646,12 @@
                 }
 
                 const timeStr = item.timestamp ? new Date(item.timestamp).toLocaleString('id-ID') : '-';
-                const hasImage = item.hasImage ? ' 📷' : '';
 
                 return `
                     <div class="history-item">
                         <span class="status-icon ${statusClass}">${statusIcon}</span>
                         <div class="info">
-                            <div class="name">${escapeHtml(item.name)}${hasImage}</div>
+                            <div class="name">${escapeHtml(item.name)}</div>
                             <div class="detail">
                                 ${escapeHtml(item.phone)}
                                 <span class="status-badge ${statusClass}">${statusLabel}</span>
@@ -1988,9 +1740,9 @@
             }
 
             const total = state.contacts.length;
-            const hasImage = state.imageData !== null;
-            const confirmMsg = `📤 Kirim broadcast ke ${total} kontak?\n\n${hasImage ? '📷 Dengan gambar' : 'Tanpa gambar'}\nPesan akan dibuka satu per satu dengan konfirmasi.`;
-            if (!confirm(confirmMsg)) return;
+            if (!confirm(`📤 Kirim broadcast ke ${total} kontak?\n\nPesan akan dibuka satu per satu dengan konfirmasi.`)) {
+                return;
+            }
 
             state.isSending = true;
             state.currentIndex = 0;
@@ -2037,18 +1789,6 @@
                     });
                 }
 
-                // Tambahkan instruksi gambar jika ada
-                let imageInstruction = '';
-                if (state.imageData && state.imageUrl) {
-                    imageInstruction = '\n\n📷 *Gambar:*';
-                    // WhatsApp tidak support base64 di URL, jadi kita beri instruksi
-                    imageInstruction += '\n📎 Klik ikon lampiran 📎 → Pilih Galeri → Pilih gambar yang sudah disiapkan';
-                } else if (state.imageData) {
-                    imageInstruction = '\n\n📷 *Gambar:* Upload gambar secara manual di WhatsApp';
-                }
-
-                personalMessage += imageInstruction;
-
                 // Simpan history
                 const historyItem = {
                     id: Date.now() + '_' + i,
@@ -2058,20 +1798,14 @@
                     status: 'pending',
                     timestamp: new Date().toISOString(),
                     index: i + 1,
-                    total: total,
-                    hasImage: state.imageData !== null,
-                    imageData: state.imageData || null,
-                    imageUrl: state.imageUrl || null
+                    total: total
                 };
                 state.history.push(historyItem);
 
-                // Buka WhatsApp dengan URL yang di-encode dengan benar
+                // Buka WhatsApp dengan encoding yang benar untuk emoji
                 const phone = contact.phone.replace('+', '');
-                // Gunakan encodeURIComponent untuk handle emoji dan karakter khusus
                 const encodedMessage = encodeURIComponent(personalMessage);
                 const url = `https://wa.me/${phone}?text=${encodedMessage}`;
-
-                // Buka di tab baru
                 window.open(url, '_blank');
 
                 // Tampilkan modal konfirmasi
@@ -2123,15 +1857,6 @@
             return new Promise((resolve) => {
                 previewName.textContent = name;
                 previewPhone.textContent = phone;
-
-                // Tampilkan preview gambar di modal
-                if (state.imageData) {
-                    modalPreviewImage.src = state.imageData;
-                    modalImagePreview.style.display = 'block';
-                } else {
-                    modalImagePreview.style.display = 'none';
-                }
-
                 confirmTitle.textContent = `📤 ${index}/${total} - Kirim ke ${name}`;
                 confirmSubtitle.textContent = 'Apakah pesan berhasil terkirim?';
 
@@ -2180,7 +1905,6 @@
             loadHistory();
             setupExcelImport();
             setupLogoUpload();
-            setupImageUpload();
 
             $('addManualBtn').addEventListener('click', () => {
                 const name = $('manualName').value.trim();
@@ -2219,21 +1943,21 @@
             renderHistory();
             updateStats();
 
-            console.log('✅ Broadcast WhatsApp Pro with Image ready!');
-            console.log(`📱 ${state.contacts.length} kontak, ${Object.keys(state.templates).length} template`);
-            console.log('📌 Untuk gambar: Upload ke server atau kirim manual via lampiran WhatsApp');
+            console.log('✅ Broadcast WhatsApp Pro ready!');
+            console.log(`📱 ${state.contacts.length} kontak, ${Object.keys(state.templates).length} template, ${state.history.length} history`);
         }
 
         document.addEventListener('DOMContentLoaded', init);
 
+        // ================================================================
+        // ========== EXPOSE GLOBAL ==========
+        // ================================================================
         window.removeContact = removeContact;
         window.clearAllContacts = clearAllContacts;
         window.addContact = addContact;
         window.confirmHistoryItem = confirmHistoryItem;
         window.failHistoryItem = failHistoryItem;
         window.clearHistory = clearHistory;
-        window.removeImage = removeImage;
-        window.uploadImageToServer = uploadImageToServer;
     </script>
 
 </body>
