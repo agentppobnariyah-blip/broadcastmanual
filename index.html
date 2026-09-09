@@ -503,6 +503,11 @@
             box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
         }
 
+        .btn-warning {
+            background: linear-gradient(135deg, var(--warning), #d97706);
+            color: #fff;
+        }
+
         .btn-sm {
             padding: 5px 12px;
             font-size: 11px;
@@ -721,6 +726,11 @@
             color: white;
         }
 
+        .history-item .action-btn.retry {
+            background: #f59e0b;
+            color: white;
+        }
+
         .history-empty {
             text-align: center;
             padding: 30px 16px;
@@ -757,7 +767,7 @@
             background: #fff;
             border-radius: 20px;
             padding: 28px 32px;
-            max-width: 420px;
+            max-width: 440px;
             width: 90%;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             animation: modalPop 0.3s ease-out;
@@ -824,10 +834,22 @@
             display: flex;
             gap: 10px;
             margin-top: 16px;
+            flex-wrap: wrap;
         }
 
         .modal-box .modal-actions .btn {
             flex: 1;
+            min-width: 80px;
+        }
+
+        .modal-box .modal-actions .btn-retry {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #fff;
+            flex: 1;
+        }
+
+        .modal-box .modal-actions .btn-retry:hover {
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
         }
 
         /* ===== TOAST ===== */
@@ -935,6 +957,9 @@
             }
             .modal-box .modal-actions {
                 flex-direction: column;
+            }
+            .modal-box .modal-actions .btn {
+                min-width: 100%;
             }
         }
 
@@ -1157,8 +1182,9 @@
                 ⚠️ <strong>Pastikan pesan sudah terkirim</strong> sebelum melanjutkan ke kontak berikutnya.
             </div>
             <div class="modal-actions">
-                <button class="btn btn-success" id="confirmSuccess">✅ Berhasil Terkirim</button>
+                <button class="btn btn-success" id="confirmSuccess">✅ Berhasil</button>
                 <button class="btn btn-danger" id="confirmFailed">❌ Gagal</button>
+                <button class="btn btn-warning" id="confirmRetry">🔄 Ulangi</button>
                 <button class="btn btn-outline" id="confirmStop">⏹️ Stop</button>
             </div>
         </div>
@@ -1180,6 +1206,7 @@
             templates: {},
             excelColumns: [],
             excelData: [],
+            retryTarget: null, // Untuk menyimpan data retry
         };
 
         // ================================================================
@@ -1658,10 +1685,18 @@
                             </div>
                         </div>
                         <div class="time">${timeStr}</div>
-                        ${isPending ? `
-                            <button class="action-btn confirm" onclick="confirmHistoryItem(${index})">✅ Confirm</button>
-                            <button class="action-btn fail" onclick="failHistoryItem(${index})">❌</button>
-                        ` : ''}
+                        <div style="display:flex; gap:4px; flex-wrap:wrap;">
+                            ${isPending ? `
+                                <button class="action-btn confirm" onclick="confirmHistoryItem(${index})">✅</button>
+                                <button class="action-btn fail" onclick="failHistoryItem(${index})">❌</button>
+                            ` : ''}
+                            ${isFailed ? `
+                                <button class="action-btn retry" onclick="retryHistoryItem(${index})">🔄 Ulangi</button>
+                            ` : ''}
+                            ${isSuccess ? `
+                                <button class="action-btn" style="background:#d1fae5; color:#065f46;" onclick="showDetailHistory(${index})">📋 Detail</button>
+                            ` : ''}
+                        </div>
                     </div>
                 `;
             }).join('');
@@ -1699,6 +1734,136 @@
             }
         }
 
+        function retryHistoryItem(index) {
+            const item = state.history[index];
+            if (!item || item.status !== 'failed') return;
+
+            // Set state untuk retry
+            state.retryTarget = {
+                index: index,
+                item: item
+            };
+
+            // Buka ulang WhatsApp dengan pesan yang sama
+            const phone = item.phone.replace('+', '');
+            const encodedMessage = encodeURIComponent(item.message);
+            const url = `https://wa.me/${phone}?text=${encodedMessage}`;
+            window.open(url, '_blank');
+
+            // Tampilkan modal konfirmasi untuk retry
+            showConfirmModalRetry(item.name, item.phone, index);
+        }
+
+        function showConfirmModalRetry(name, phone, index) {
+            return new Promise((resolve) => {
+                previewName.textContent = name;
+                previewPhone.textContent = phone;
+                confirmTitle.textContent = `🔄 Ulangi Kirim ke ${name}`;
+                confirmSubtitle.textContent = 'Apakah pesan berhasil terkirim pada percobaan ulang?';
+
+                confirmModal.classList.add('active');
+
+                const successBtn = $('confirmSuccess');
+                const failedBtn = $('confirmFailed');
+                const retryBtn = $('confirmRetry');
+                const stopBtn = $('confirmStop');
+
+                // Clone untuk replace listener
+                const newSuccess = successBtn.cloneNode(true);
+                const newFailed = failedBtn.cloneNode(true);
+                const newRetry = retryBtn.cloneNode(true);
+                const newStop = stopBtn.cloneNode(true);
+
+                successBtn.parentNode.replaceChild(newSuccess, successBtn);
+                failedBtn.parentNode.replaceChild(newFailed, failedBtn);
+                retryBtn.parentNode.replaceChild(newRetry, retryBtn);
+                stopBtn.parentNode.replaceChild(newStop, stopBtn);
+
+                const freshSuccess = $('confirmSuccess');
+                const freshFailed = $('confirmFailed');
+                const freshRetry = $('confirmRetry');
+                const freshStop = $('confirmStop');
+
+                freshSuccess.onclick = () => {
+                    confirmModal.classList.remove('active');
+                    // Update history item
+                    if (state.retryTarget) {
+                        const item = state.history[state.retryTarget.index];
+                        if (item) {
+                            item.status = 'success';
+                            item.retry_count = (item.retry_count || 0) + 1;
+                            item.confirmed_at = new Date().toISOString();
+                            saveHistory();
+                            showToast(`✅ ${item.name} berhasil terkirim (ulang ke-${item.retry_count})`, 'success');
+                        }
+                    }
+                    state.retryTarget = null;
+                    resolve('success');
+                };
+
+                freshFailed.onclick = () => {
+                    confirmModal.classList.remove('active');
+                    if (state.retryTarget) {
+                        const item = state.history[state.retryTarget.index];
+                        if (item) {
+                            item.status = 'failed';
+                            item.retry_count = (item.retry_count || 0) + 1;
+                            item.confirmed_at = new Date().toISOString();
+                            saveHistory();
+                            showToast(`❌ ${item.name} gagal (ulang ke-${item.retry_count})`, 'error');
+                        }
+                    }
+                    state.retryTarget = null;
+                    resolve('failed');
+                };
+
+                freshRetry.onclick = () => {
+                    // Tutup modal dan buka ulang
+                    confirmModal.classList.remove('active');
+                    if (state.retryTarget) {
+                        const item = state.history[state.retryTarget.index];
+                        if (item) {
+                            // Buka ulang WhatsApp
+                            const phone = item.phone.replace('+', '');
+                            const encodedMessage = encodeURIComponent(item.message);
+                            const url = `https://wa.me/${phone}?text=${encodedMessage}`;
+                            window.open(url, '_blank');
+                            // Tampilkan modal lagi
+                            setTimeout(() => {
+                                showConfirmModalRetry(name, phone, index);
+                            }, 300);
+                        }
+                    }
+                    resolve('retry');
+                };
+
+                freshStop.onclick = () => {
+                    confirmModal.classList.remove('active');
+                    state.retryTarget = null;
+                    resolve('stop');
+                };
+            });
+        }
+
+        function showDetailHistory(index) {
+            const item = state.history[index];
+            if (!item) return;
+
+            const timeStr = item.timestamp ? new Date(item.timestamp).toLocaleString('id-ID') : '-';
+            const confirmTime = item.confirmed_at ? new Date(item.confirmed_at).toLocaleString('id-ID') : '-';
+
+            alert(
+                `📋 Detail History\n\n` +
+                `👤 Nama: ${item.name}\n` +
+                `📱 Telepon: ${item.phone}\n` +
+                `📊 Status: ${item.status === 'success' ? '✅ Terkirim' : '❌ Gagal'}\n` +
+                `🔄 Ulang ke: ${item.retry_count || 0}x\n` +
+                `📅 Dikirim: ${timeStr}\n` +
+                `${item.confirmed_at ? `✅ Dikonfirmasi: ${confirmTime}` : ''}\n\n` +
+                `📝 Pesan:\n${item.message.substring(0, 200)}${item.message.length > 200 ? '...' : ''}`
+            );
+        }
+
         function clearHistory() {
             if (state.history.length === 0) {
                 showToast('📭 Tidak ada history untuk dihapus', 'warning');
@@ -1714,6 +1879,7 @@
         // ========== SEND BROADCAST ==========
         // ================================================================
         let sendAbort = false;
+        let currentResolve = null;
 
         async function sendBroadcast() {
             if (state.isSending) {
@@ -1798,11 +1964,12 @@
                     status: 'pending',
                     timestamp: new Date().toISOString(),
                     index: i + 1,
-                    total: total
+                    total: total,
+                    retry_count: 0
                 };
                 state.history.push(historyItem);
 
-                // Buka WhatsApp dengan encoding yang benar untuk emoji
+                // Buka WhatsApp dengan encoding yang benar
                 const phone = contact.phone.replace('+', '');
                 const encodedMessage = encodeURIComponent(personalMessage);
                 const url = `https://wa.me/${phone}?text=${encodedMessage}`;
@@ -1824,6 +1991,13 @@
                     historyItem.status = 'failed';
                     historyItem.confirmed_at = new Date().toISOString();
                     showToast(`❌ ${contact.name} - Gagal terkirim`, 'error');
+                } else if (confirmed === 'retry') {
+                    // Retry: tetap di status pending, ulangi loop
+                    historyItem.status = 'pending';
+                    historyItem.retry_count = (historyItem.retry_count || 0) + 1;
+                    i--; // Ulangi kontak ini
+                    showToast(`🔄 ${contact.name} - Mengulang kirim (ke-${historyItem.retry_count})`, 'warning');
+                    continue;
                 }
 
                 saveHistory();
@@ -1835,7 +2009,8 @@
             progressText.textContent = sendAbort ? '⏹️ Broadcast dihentikan' : '✅ Broadcast selesai!';
 
             if (!sendAbort) {
-                showToast(`✅ Broadcast selesai! ${state.history.filter(h => h.status === 'success').length} terkirim`, 'success');
+                const successCount = state.history.filter(h => h.status === 'success').length;
+                showToast(`✅ Broadcast selesai! ${successCount} terkirim`, 'success');
             }
 
             state.isSending = false;
@@ -1864,18 +2039,23 @@
 
                 const successBtn = $('confirmSuccess');
                 const failedBtn = $('confirmFailed');
+                const retryBtn = $('confirmRetry');
                 const stopBtn = $('confirmStop');
 
+                // Clone untuk replace listener
                 const newSuccess = successBtn.cloneNode(true);
                 const newFailed = failedBtn.cloneNode(true);
+                const newRetry = retryBtn.cloneNode(true);
                 const newStop = stopBtn.cloneNode(true);
 
                 successBtn.parentNode.replaceChild(newSuccess, successBtn);
                 failedBtn.parentNode.replaceChild(newFailed, failedBtn);
+                retryBtn.parentNode.replaceChild(newRetry, retryBtn);
                 stopBtn.parentNode.replaceChild(newStop, stopBtn);
 
                 const freshSuccess = $('confirmSuccess');
                 const freshFailed = $('confirmFailed');
+                const freshRetry = $('confirmRetry');
                 const freshStop = $('confirmStop');
 
                 freshSuccess.onclick = () => {
@@ -1886,6 +2066,38 @@
                 freshFailed.onclick = () => {
                     confirmModal.classList.remove('active');
                     resolve('failed');
+                };
+
+                freshRetry.onclick = () => {
+                    confirmModal.classList.remove('active');
+                    // Buka ulang WhatsApp
+                    const phone = previewPhone.textContent.replace('+', '');
+                    const message = messageInput.value.trim();
+                    let personalMessage = message
+                        .replace(/{nama}/g, name)
+                        .replace(/{hp}/g, phone)
+                        .replace(/{index}/g, index)
+                        .replace(/{total}/g, total);
+
+                    // Tambahkan variabel extra jika ada
+                    const contact = state.contacts.find(c => c.name === name);
+                    if (contact && contact.extra) {
+                        Object.keys(contact.extra).forEach(key => {
+                            const regex = new RegExp(`\\{${key}\\}`, 'g');
+                            personalMessage = personalMessage.replace(regex, contact.extra[key] || '');
+                        });
+                    }
+
+                    const encodedMessage = encodeURIComponent(personalMessage);
+                    const url = `https://wa.me/${phone}?text=${encodedMessage}`;
+                    window.open(url, '_blank');
+
+                    // Tampilkan modal lagi setelah delay
+                    setTimeout(() => {
+                        showConfirmModal(name, phone, index, total).then(result => {
+                            resolve(result);
+                        });
+                    }, 300);
                 };
 
                 freshStop.onclick = () => {
@@ -1957,6 +2169,8 @@
         window.addContact = addContact;
         window.confirmHistoryItem = confirmHistoryItem;
         window.failHistoryItem = failHistoryItem;
+        window.retryHistoryItem = retryHistoryItem;
+        window.showDetailHistory = showDetailHistory;
         window.clearHistory = clearHistory;
     </script>
 
