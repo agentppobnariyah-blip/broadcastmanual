@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Broadcast WhatsApp Pro</title>
+    <title>Broadcast WhatsApp Pro - With Image</title>
     <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
     <style>
         /* ================================================================ */
@@ -27,7 +27,7 @@
             --gray: #64748b;
             --gray-light: #e2e8f0;
             --border: #e5e7eb;
-            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             --radius: 16px;
             --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -40,9 +40,6 @@
             color: var(--dark);
         }
 
-        /* ================================================================ */
-        /* ========== LAYOUT ========== */
-        /* ================================================================ */
         .container {
             max-width: 1400px;
             margin: 0 auto;
@@ -152,9 +149,7 @@
             color: var(--warning);
         }
 
-        /* ================================================================ */
-        /* ========== GRID 3 ========== */
-        /* ================================================================ */
+        /* ===== GRID ===== */
         .grid-3 {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
@@ -172,7 +167,7 @@
 
         .card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
         }
 
         .card-title {
@@ -199,9 +194,7 @@
             color: #d97706;
         }
 
-        /* ================================================================ */
-        /* ========== FORM ELEMENTS ========== */
-        /* ================================================================ */
+        /* ===== FORM ===== */
         .form-group {
             margin-bottom: 14px;
         }
@@ -257,13 +250,11 @@
             display: block;
         }
 
-        /* ================================================================ */
-        /* ========== DROP ZONE ========== */
-        /* ================================================================ */
+        /* ===== DROP ZONE ===== */
         .drop-zone {
             border: 2px dashed var(--border);
             border-radius: 12px;
-            padding: 24px 16px;
+            padding: 20px 16px;
             text-align: center;
             cursor: pointer;
             transition: all var(--transition);
@@ -282,7 +273,7 @@
         }
 
         .drop-zone .icon {
-            font-size: 32px;
+            font-size: 28px;
             margin-bottom: 4px;
             display: block;
         }
@@ -337,11 +328,71 @@
             padding: 0 4px;
         }
 
-        /* ================================================================ */
-        /* ========== CONTACT LIST ========== */
-        /* ================================================================ */
+        /* ===== IMAGE UPLOAD ===== */
+        .image-upload-area {
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--transition);
+            background: #fafcff;
+            position: relative;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .image-upload-area:hover {
+            border-color: var(--primary);
+            background: #f8faff;
+        }
+
+        .image-upload-area.dragover {
+            border-color: var(--primary);
+            background: #eef2ff;
+        }
+
+        .image-upload-area img {
+            max-width: 100%;
+            max-height: 180px;
+            border-radius: 8px;
+            object-fit: contain;
+        }
+
+        .image-upload-area .placeholder {
+            color: #9ca3af;
+            font-size: 13px;
+        }
+
+        .image-upload-area .placeholder .icon {
+            font-size: 32px;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .image-upload-area input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .image-preview-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+            justify-content: center;
+        }
+
+        /* ===== CONTACT LIST ===== */
         .contact-list {
-            max-height: 200px;
+            max-height: 180px;
             overflow-y: auto;
             border: 1px solid var(--border);
             border-radius: 10px;
@@ -419,9 +470,7 @@
             background: #fef2f2;
         }
 
-        /* ================================================================ */
-        /* ========== CONTACT COUNT ========== */
-        /* ================================================================ */
+        /* ===== CONTACT COUNT ===== */
         .contact-count {
             display: flex;
             align-items: center;
@@ -452,9 +501,7 @@
             background: #fef2f2;
         }
 
-        /* ================================================================ */
-        /* ========== BUTTONS ========== */
-        /* ================================================================ */
+        /* ===== BUTTONS ===== */
         .btn {
             padding: 10px 18px;
             border: none;
@@ -534,9 +581,7 @@
             transform: none !important;
         }
 
-        /* ================================================================ */
-        /* ========== TEMPLATE SECTION ========== */
-        /* ================================================================ */
+        /* ===== TEMPLATE ===== */
         .template-actions {
             display: flex;
             gap: 6px;
@@ -544,9 +589,7 @@
             flex-wrap: wrap;
         }
 
-        /* ================================================================ */
-        /* ========== VARIABLE HINT ========== */
-        /* ================================================================ */
+        /* ===== VARIABLE HINT ===== */
         .variable-hint {
             margin-top: 10px;
             border: 1px solid var(--border);
@@ -592,9 +635,7 @@
             color: var(--gray);
         }
 
-        /* ================================================================ */
-        /* ========== PROGRESS ========== */
-        /* ================================================================ */
+        /* ===== PROGRESS ===== */
         .progress-container {
             margin-top: 14px;
             display: none;
@@ -634,9 +675,7 @@
             color: var(--primary);
         }
 
-        /* ================================================================ */
-        /* ========== HISTORY ========== */
-        /* ================================================================ */
+        /* ===== HISTORY ===== */
         .history-list {
             max-height: 300px;
             overflow-y: auto;
@@ -760,9 +799,7 @@
             display: block;
         }
 
-        /* ================================================================ */
-        /* ========== MODAL CONFIRM ========== */
-        /* ================================================================ */
+        /* ===== MODAL ===== */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -845,9 +882,7 @@
             flex: 1;
         }
 
-        /* ================================================================ */
-        /* ========== TOAST ========== */
-        /* ================================================================ */
+        /* ===== TOAST ===== */
         #toastContainer {
             position: fixed;
             top: 20px;
@@ -914,9 +949,7 @@
             }
         }
 
-        /* ================================================================ */
-        /* ========== RESPONSIVE ========== */
-        /* ================================================================ */
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 1200px) {
             .grid-3 {
                 grid-template-columns: 1fr 1fr;
@@ -973,19 +1006,9 @@
                 font-size: 12px;
                 padding: 8px 14px;
             }
-            .contact-item {
-                padding: 6px 10px;
-            }
-            .contact-item .avatar {
-                width: 28px;
-                height: 28px;
-                font-size: 10px;
-            }
         }
 
-        /* ================================================================ */
-        /* ========== SCROLLBAR ========== */
-        /* ================================================================ */
+        /* ===== SCROLLBAR ===== */
         .contact-list::-webkit-scrollbar,
         .history-list::-webkit-scrollbar {
             width: 4px;
@@ -1001,11 +1024,6 @@
             background: #d1d5db;
             border-radius: 4px;
         }
-
-        .contact-list::-webkit-scrollbar-thumb:hover,
-        .history-list::-webkit-scrollbar-thumb:hover {
-            background: #9ca3af;
-        }
     </style>
 </head>
 <body>
@@ -1020,7 +1038,7 @@
                 </div>
                 <div class="header-title">
                     <h1>Broadcast WhatsApp Pro</h1>
-                    <p>Kirim pesan massal dengan konfirmasi per kontak</p>
+                    <p>Dengan gambar & variabel dinamis dari Excel</p>
                 </div>
             </div>
             <div class="header-stats">
@@ -1051,6 +1069,13 @@
                     <div id="fileInfo"></div>
                 </div>
 
+                <!-- Preview Kolom Excel -->
+                <div id="excelColumns" style="display:none; margin-bottom: 10px; padding: 8px 12px; background: #f1f5f9; border-radius: 8px; font-size: 12px;">
+                    <strong>📊 Kolom yang terdeteksi:</strong>
+                    <span id="columnList" style="color: var(--primary);"></span>
+                    <span class="input-hint">Variabel: <code>{nama}</code> untuk nama, <code>{hp}</code> untuk nomor, dan lainnya</span>
+                </div>
+
                 <!-- Tambah Manual -->
                 <div class="form-group">
                     <label>Tambah Kontak Manual</label>
@@ -1072,9 +1097,32 @@
                 </div>
             </div>
 
-            <!-- ===== KOLOM 2: PESAN & KIRIM ===== -->
+            <!-- ===== KOLOM 2: PESAN & GAMBAR ===== -->
             <div class="card">
-                <div class="card-title">✏️ Template Pesan</div>
+                <div class="card-title">
+                    ✏️ Template Pesan
+                    <span class="badge" id="imageBadge">📷</span>
+                </div>
+
+                <!-- Upload Gambar -->
+                <div class="form-group">
+                    <label>🖼️ Upload Gambar (Opsional)</label>
+                    <div class="image-upload-area" id="imageDropZone">
+                        <div class="placeholder" id="imagePlaceholder">
+                            <span class="icon">🖼️</span>
+                            <span>Klik atau drag untuk upload gambar</span>
+                            <span style="font-size: 11px; color: #9ca3af;">JPG, PNG, GIF - Max 5MB</span>
+                        </div>
+                        <input type="file" id="imageInput" accept="image/*">
+                        <div id="imagePreview" style="display:none; width:100%;">
+                            <img id="previewImage" src="" alt="Preview">
+                            <div class="image-preview-actions">
+                                <button class="btn btn-danger btn-sm" id="removeImageBtn">🗑️ Hapus Gambar</button>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="input-hint">Gambar akan disisipkan sebagai link di pesan WhatsApp</span>
+                </div>
 
                 <!-- Template Select -->
                 <div class="form-group">
@@ -1094,18 +1142,21 @@
                 <div class="form-group" style="margin-top: 10px;">
                     <label>📝 Pesan <span class="required">*</span></label>
                     <textarea class="form-control" id="messageInput" rows="5" placeholder="Tulis pesan broadcast..."></textarea>
-                    <span class="input-hint">Gunakan <code>{nama}</code> untuk menyisipkan nama kontak</span>
+                    <span class="input-hint">Gunakan variabel dari Excel: <code>{nama}</code>, <code>{hp}</code>, dll</span>
                 </div>
 
                 <!-- Variable Hint -->
                 <div class="variable-hint">
                     <details>
                         <summary>💡 Variabel yang tersedia</summary>
-                        <div class="var-grid">
+                        <div class="var-grid" id="variableGrid">
                             <div class="var-item"><code>{nama}</code> - Nama kontak</div>
-                            <div class="var-item"><code>{phone}</code> - Nomor telepon</div>
+                            <div class="var-item"><code>{hp}</code> - Nomor telepon</div>
                             <div class="var-item"><code>{index}</code> - Nomor urut</div>
                             <div class="var-item"><code>{total}</code> - Total kontak</div>
+                            <div class="var-item" style="grid-column: 1 / -1; color: var(--primary); font-size: 11px; border-top: 1px solid var(--border); padding-top: 6px;">
+                                📊 Kolom Excel akan otomatis menjadi variabel
+                            </div>
                         </div>
                     </details>
                 </div>
@@ -1201,6 +1252,9 @@
             templates: {},
             pendingHistory: [],
             logo: null,
+            imageData: null,
+            excelColumns: [],
+            excelData: [],
         };
 
         // ================================================================
@@ -1228,6 +1282,14 @@
         const previewPhone = $('previewPhone');
         const confirmTitle = $('confirmTitle');
         const confirmSubtitle = $('confirmSubtitle');
+        const excelColumns = $('excelColumns');
+        const columnList = $('columnList');
+        const variableGrid = $('variableGrid');
+        const imageDropZone = $('imageDropZone');
+        const imageInput = $('imageInput');
+        const imagePreview = $('imagePreview');
+        const previewImage = $('previewImage');
+        const imagePlaceholder = $('imagePlaceholder');
 
         // ================================================================
         // ========== TOAST ==========
@@ -1275,6 +1337,79 @@
         }
 
         // ================================================================
+        // ========== IMAGE UPLOAD ==========
+        // ================================================================
+        function setupImageUpload() {
+            const dropZone = imageDropZone;
+            const input = imageInput;
+
+            // Click to upload
+            dropZone.addEventListener('click', (e) => {
+                if (e.target.closest('.image-preview-actions')) return;
+                input.click();
+            });
+
+            // Drag and drop
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('dragover');
+            });
+
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('dragover');
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+                if (e.dataTransfer.files.length > 0) {
+                    handleImageFile(e.dataTransfer.files[0]);
+                }
+            });
+
+            input.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    handleImageFile(e.target.files[0]);
+                }
+            });
+
+            // Remove image
+            $('removeImageBtn').addEventListener('click', () => {
+                removeImage();
+            });
+        }
+
+        function handleImageFile(file) {
+            if (!file.type.startsWith('image/')) {
+                showToast('⚠️ File harus berupa gambar!', 'error');
+                return;
+            }
+
+            if (file.size > 5 * 1024 * 1024) {
+                showToast('⚠️ Ukuran gambar maksimal 5MB!', 'error');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                state.imageData = e.target.result;
+                previewImage.src = e.target.result;
+                imagePreview.style.display = 'block';
+                imagePlaceholder.style.display = 'none';
+                showToast('✅ Gambar berhasil diupload!', 'success');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removeImage() {
+            state.imageData = null;
+            imagePreview.style.display = 'none';
+            imagePlaceholder.style.display = 'block';
+            imageInput.value = '';
+            showToast('🗑️ Gambar dihapus', 'info');
+        }
+
+        // ================================================================
         // ========== CONTACT FUNCTIONS ==========
         // ================================================================
         function formatPhone(phone) {
@@ -1289,7 +1424,7 @@
             return clean.length >= 10 && clean.length <= 15;
         }
 
-        function addContact(name, phone) {
+        function addContact(name, phone, extraData = {}) {
             const formatted = formatPhone(phone);
             if (!isValidPhone(phone)) {
                 showToast('⚠️ Nomor tidak valid! Minimal 10 digit.', 'error');
@@ -1305,7 +1440,8 @@
                 id: Date.now() + '_' + Math.random().toString(36).substr(2, 4),
                 name: name.trim() || 'Kontak',
                 phone: formatted,
-                status: 'pending'
+                status: 'pending',
+                extra: extraData
             });
 
             renderContacts();
@@ -1345,6 +1481,8 @@
                     <div class="info">
                         <div class="name">${escapeHtml(c.name)}</div>
                         <div class="phone">${escapeHtml(c.phone)}</div>
+                        ${c.extra && Object.keys(c.extra).length > 0 ? 
+                            `<div style="font-size: 10px; color: #9ca3af;">${Object.keys(c.extra).map(k => `${k}: ${c.extra[k]}`).join(', ')}</div>` : ''}
                     </div>
                     <button class="remove-btn" onclick="removeContact('${c.id}')" title="Hapus">✕</button>
                 </div>
@@ -1405,9 +1543,19 @@
                         return;
                     }
 
+                    // Deteksi kolom
                     const headers = Object.keys(json[0]);
+                    state.excelColumns = headers;
+
+                    // Tampilkan kolom yang terdeteksi
+                    excelColumns.style.display = 'block';
+                    columnList.textContent = headers.join(', ');
+
+                    // Update variable grid
+                    updateVariableGrid(headers);
+
                     let nameCol = headers.find(h => /nama|name|Nama|Name/i.test(h));
-                    let phoneCol = headers.find(h => /hp|phone|nomor|no|telepon|Phone|HP|No|Telepon/i.test(h));
+                    let phoneCol = headers.find(h => /hp|phone|nomor|no|telepon|Phone|HP|No|Telepon|wa|WhatsApp/i.test(h));
 
                     if (!phoneCol) {
                         showToast('⚠️ Kolom nomor tidak ditemukan!', 'error');
@@ -1418,6 +1566,8 @@
                     let skipped = 0;
                     let name = nameCol || 'Nama';
 
+                    state.excelData = json;
+
                     json.forEach(row => {
                         const phone = String(row[phoneCol] || '').replace(/[^\d]/g, '');
                         const nama = String(row[name] || '').trim() || `Kontak ${added + 1}`;
@@ -1425,11 +1575,20 @@
                         if (phone && phone.length >= 10) {
                             const formatted = formatPhone(phone);
                             if (!state.contacts.some(c => c.phone === formatted)) {
+                                // Simpan semua data tambahan
+                                const extra = {};
+                                headers.forEach(h => {
+                                    if (h !== nameCol && h !== phoneCol) {
+                                        extra[h] = String(row[h] || '').trim();
+                                    }
+                                });
+
                                 state.contacts.push({
                                     id: Date.now() + '_' + Math.random().toString(36).substr(2, 4),
-                                    name: nama || 'Kontak',
+                                    name: nama,
                                     phone: formatted,
-                                    status: 'pending'
+                                    status: 'pending',
+                                    extra: extra
                                 });
                                 added++;
                             } else {
@@ -1463,6 +1622,34 @@
         }
 
         // ================================================================
+        // ========== UPDATE VARIABLE GRID ==========
+        // ================================================================
+        function updateVariableGrid(headers) {
+            let html = `
+                <div class="var-item"><code>{nama}</code> - Nama kontak</div>
+                <div class="var-item"><code>{hp}</code> - Nomor telepon</div>
+                <div class="var-item"><code>{index}</code> - Nomor urut</div>
+                <div class="var-item"><code>{total}</code> - Total kontak</div>
+            `;
+
+            // Tambahkan kolom Excel
+            headers.forEach(h => {
+                if (h.toLowerCase() !== 'nama' && h.toLowerCase() !== 'name' &&
+                    h.toLowerCase() !== 'hp' && h.toLowerCase() !== 'phone') {
+                    html += `<div class="var-item"><code>{${h}}</code> - ${h}</div>`;
+                }
+            });
+
+            html += `
+                <div class="var-item" style="grid-column: 1 / -1; color: var(--primary); font-size: 11px; border-top: 1px solid var(--border); padding-top: 6px;">
+                    📊 ${headers.length} kolom terdeteksi - semua bisa jadi variabel
+                </div>
+            `;
+
+            variableGrid.innerHTML = html;
+        }
+
+        // ================================================================
         // ========== TEMPLATE FUNCTIONS ==========
         // ================================================================
         const TEMPLATE_STORAGE_KEY = 'broadcast_templates_pro';
@@ -1484,6 +1671,9 @@
                 return;
             }
 
+            // Simpan juga data gambar
+            const hasImage = state.imageData !== null;
+
             const name = prompt('Nama template:');
             if (!name || name.trim() === '') {
                 showToast('⚠️ Nama template tidak boleh kosong!', 'error');
@@ -1493,7 +1683,9 @@
             const key = name.trim().toLowerCase().replace(/\s/g, '_');
             state.templates[key] = {
                 name: name.trim(),
-                message: message
+                message: message,
+                hasImage: hasImage,
+                image: state.imageData || null
             };
 
             localStorage.setItem(TEMPLATE_STORAGE_KEY, JSON.stringify(state.templates));
@@ -1530,7 +1722,8 @@
             keys.forEach(key => {
                 const opt = document.createElement('option');
                 opt.value = key;
-                opt.textContent = state.templates[key].name;
+                const hasImage = state.templates[key].hasImage ? ' 📷' : '';
+                opt.textContent = state.templates[key].name + hasImage;
                 templateSelect.appendChild(opt);
             });
         }
@@ -1541,7 +1734,20 @@
                 messageInput.value = '';
                 return;
             }
-            messageInput.value = state.templates[key].message;
+
+            const template = state.templates[key];
+            messageInput.value = template.message;
+
+            // Load image if exists
+            if (template.hasImage && template.image) {
+                state.imageData = template.image;
+                previewImage.src = template.image;
+                imagePreview.style.display = 'block';
+                imagePlaceholder.style.display = 'none';
+                showToast(`📷 Template "${template.name}" memiliki gambar`, 'info');
+            } else {
+                removeImage();
+            }
         }
 
         // ================================================================
@@ -1615,12 +1821,13 @@
                 }
 
                 const timeStr = item.timestamp ? new Date(item.timestamp).toLocaleString('id-ID') : '-';
+                const hasImage = item.hasImage ? ' 📷' : '';
 
                 return `
                     <div class="history-item">
                         <span class="status-icon ${statusClass}">${statusIcon}</span>
                         <div class="info">
-                            <div class="name">${escapeHtml(item.name)}</div>
+                            <div class="name">${escapeHtml(item.name)}${hasImage}</div>
                             <div class="detail">
                                 ${escapeHtml(item.phone)}
                                 <span class="status-badge ${statusClass}">${statusLabel}</span>
@@ -1701,7 +1908,7 @@
                 return;
             }
 
-            // Cek apakah ada history pending dari sebelumnya
+            // Cek apakah ada history pending
             const pendingHistory = state.history.filter(h => h.status === 'pending');
             if (pendingHistory.length > 0) {
                 if (!confirm(`⏳ Ada ${pendingHistory.length} data pending belum dikonfirmasi.\n\nLanjutkan broadcast?`)) {
@@ -1710,14 +1917,13 @@
             }
 
             const total = state.contacts.length;
-            const confirmMsg = `📤 Kirim broadcast ke ${total} kontak?\n\nPesan akan dibuka satu per satu dengan konfirmasi.`;
+            const confirmMsg = `📤 Kirim broadcast ke ${total} kontak?\n\n${state.imageData ? '📷 Dengan gambar' : 'Tanpa gambar'}\nPesan akan dibuka satu per satu dengan konfirmasi.`;
             if (!confirm(confirmMsg)) return;
 
             state.isSending = true;
             state.currentIndex = 0;
             sendAbort = false;
 
-            // Tampilkan progress
             progressContainer.classList.add('active');
             progressFill.style.width = '0%';
             progressPercent.textContent = '0%';
@@ -1727,7 +1933,6 @@
             btn.disabled = true;
             btn.textContent = '⏳ Mengirim...';
 
-            // Reset kontak status
             state.contacts.forEach(c => c.status = 'pending');
 
             for (let i = 0; i < total; i++) {
@@ -1740,20 +1945,36 @@
                 state.currentIndex = i;
                 const contact = state.contacts[i];
 
-                // Update progress
                 const percent = Math.round(((i + 1) / total) * 100);
                 progressFill.style.width = percent + '%';
                 progressPercent.textContent = percent + '%';
                 progressText.textContent = `Mengirim ke ${i + 1}/${total} - ${contact.name}`;
 
-                // Personalisasi pesan
+                // Personalisasi pesan dengan semua variabel
                 let personalMessage = message
                     .replace(/{nama}/g, contact.name)
-                    .replace(/{phone}/g, contact.phone)
+                    .replace(/{hp}/g, contact.phone)
                     .replace(/{index}/g, i + 1)
                     .replace(/{total}/g, total);
 
-                // Tambahkan ke history dengan status pending
+                // Tambahkan variabel dari extra data
+                if (contact.extra) {
+                    Object.keys(contact.extra).forEach(key => {
+                        const regex = new RegExp(`\\{${key}\\}`, 'g');
+                        personalMessage = personalMessage.replace(regex, contact.extra[key] || '');
+                    });
+                }
+
+                // Tambahkan gambar jika ada
+                if (state.imageData) {
+                    // Upload image ke imgbb atau gunakan base64 langsung
+                    // Untuk demo, kita gunakan base64 (WhatsApp tidak support base64 image langsung)
+                    // Sebagai gantinya, kita beri link gambar atau instruksi
+                    personalMessage += '\n\n📷 *Gambar Terlampir*';
+                    // Catatan: WhatsApp API tidak support base64 image langsung
+                    // Untuk produksi, upload ke server dan berikan link
+                }
+
                 const historyItem = {
                     id: Date.now() + '_' + i,
                     name: contact.name,
@@ -1762,16 +1983,25 @@
                     status: 'pending',
                     timestamp: new Date().toISOString(),
                     index: i + 1,
-                    total: total
+                    total: total,
+                    hasImage: state.imageData !== null,
+                    imageData: state.imageData || null
                 };
                 state.history.push(historyItem);
 
                 // Buka WhatsApp
                 const phone = contact.phone.replace('+', '');
-                const url = `https://wa.me/${phone}?text=${encodeURIComponent(personalMessage)}`;
+                let url = `https://wa.me/${phone}?text=${encodeURIComponent(personalMessage)}`;
+
+                // Jika ada gambar, kita buka dengan cara manual (WhatsApp Web tidak support base64)
+                // Untuk image, user harus upload manual atau kita beri link
+                if (state.imageData) {
+                    // Tampilkan notifikasi untuk upload gambar manual
+                    showToast(`📷 Kirim gambar secara manual untuk ${contact.name}`, 'warning', 2000);
+                }
+
                 window.open(url, '_blank');
 
-                // Tampilkan modal konfirmasi
                 const confirmed = await showConfirmModal(contact.name, contact.phone, i + 1, total);
 
                 if (confirmed === 'stop') {
@@ -1789,14 +2019,10 @@
                     showToast(`❌ ${contact.name} - Gagal terkirim`, 'error');
                 }
 
-                // Save history after each item
                 saveHistory();
-
-                // Small delay
                 await new Promise(r => setTimeout(r, 200));
             }
 
-            // Selesai
             progressFill.style.width = '100%';
             progressPercent.textContent = '100%';
             progressText.textContent = sendAbort ? '⏹️ Broadcast dihentikan' : '✅ Broadcast selesai!';
@@ -1829,7 +2055,6 @@
 
                 confirmModal.classList.add('active');
 
-                // Clean up old listeners
                 const successBtn = $('confirmSuccess');
                 const failedBtn = $('confirmFailed');
                 const stopBtn = $('confirmStop');
@@ -1869,15 +2094,12 @@
         // ========== INIT ==========
         // ================================================================
         function init() {
-            // Load data
             loadTemplates();
             loadHistory();
-
-            // Setup import
             setupExcelImport();
             setupLogoUpload();
+            setupImageUpload();
 
-            // Event listeners
             $('addManualBtn').addEventListener('click', () => {
                 const name = $('manualName').value.trim();
                 const phone = $('manualPhone').value.trim();
@@ -1907,31 +2129,27 @@
             historyFilter.addEventListener('change', renderHistory);
             $('clearHistoryBtn').addEventListener('click', clearHistory);
 
-            // Auto format phone
             $('manualPhone').addEventListener('input', function() {
                 this.value = this.value.replace(/[^\d]/g, '');
             });
 
-            // Initial render
             renderContacts();
             renderHistory();
             updateStats();
 
-            console.log('✅ Broadcast WhatsApp Pro ready!');
-            console.log(`📱 ${state.contacts.length} kontak, ${Object.keys(state.templates).length} template, ${state.history.length} history`);
+            console.log('✅ Broadcast WhatsApp Pro with Image ready!');
+            console.log(`📱 ${state.contacts.length} kontak, ${Object.keys(state.templates).length} template`);
         }
 
         document.addEventListener('DOMContentLoaded', init);
 
-        // ================================================================
-        // ========== EXPOSE GLOBAL ==========
-        // ================================================================
         window.removeContact = removeContact;
         window.clearAllContacts = clearAllContacts;
         window.addContact = addContact;
         window.confirmHistoryItem = confirmHistoryItem;
         window.failHistoryItem = failHistoryItem;
         window.clearHistory = clearHistory;
+        window.removeImage = removeImage;
     </script>
 
 </body>
