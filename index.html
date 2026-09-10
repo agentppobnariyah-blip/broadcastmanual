@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Broadcast WhatsApp Pro - ✍️ By Yudha Prawira</title>
+    <title>Broadcast WhatsApp Pro - By Yudha Prawira</title>
     <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
     <style>
         /* ================================================================ */
@@ -30,6 +30,7 @@
             --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             --radius: 16px;
             --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --tiktok: #000000;
         }
 
         body {
@@ -117,19 +118,64 @@
             line-height: 1.2;
         }
 
-        .header-title .by-credit {
+        /* ===== CREDIT LINK ===== */
+        .by-credit {
             font-size: 11px;
             color: var(--gray);
-            margin-top: 2px;
+            margin-top: 3px;
             font-weight: 500;
             letter-spacing: 0.3px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            padding: 3px 10px;
+            border-radius: 20px;
+            background: #f1f5f9;
+            border: 1px solid transparent;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
         }
 
-        .header-title .by-credit strong {
+        .by-credit:hover {
+            background: linear-gradient(135deg, #000000, #25F4EE);
+            color: #ffffff;
+            border-color: #25F4EE;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 244, 238, 0.3);
+        }
+
+        .by-credit:active {
+            transform: translateY(0);
+        }
+
+        .by-credit .tiktok-icon {
+            font-size: 13px;
+            display: inline-block;
+            transition: transform 0.25s;
+        }
+
+        .by-credit:hover .tiktok-icon {
+            transform: scale(1.2) rotate(-8deg);
+        }
+
+        .by-credit strong {
             color: var(--primary);
             font-weight: 700;
+            transition: color 0.25s;
         }
 
+        .by-credit:hover strong {
+            color: #ffffff;
+        }
+
+        .by-credit .username {
+            font-weight: 600;
+            opacity: 0.85;
+            font-size: 10px;
+        }
+
+        /* ===== HEADER STATS ===== */
         .header-stats {
             display: flex;
             gap: 16px;
@@ -1046,6 +1092,9 @@
             .cooldown-container .cooldown-timer {
                 font-size: 26px;
             }
+            .by-credit {
+                font-size: 10px;
+            }
         }
 
         /* ===== SCROLLBAR ===== */
@@ -1078,7 +1127,15 @@
                 </div>
                 <div class="header-title">
                     <h1>Broadcast WhatsApp Pro</h1>
-                    <div class="by-credit">✍️ By <strong>Yudha Prawira</strong></div>
+                    <a href="https://www.tiktok.com/@yudha.reviewer" 
+                       target="_blank" 
+                       rel="noopener noreferrer"
+                       class="by-credit"
+                       title="Kunjungi TikTok @yudha.reviewer">
+                        <span class="tiktok-icon">🎵</span>
+                        By <strong>Yudha Prawira</strong>
+                        <span class="username">@yudha.reviewer</span>
+                    </a>
                 </div>
             </div>
             <div class="header-stats">
@@ -1298,7 +1355,6 @@
             excelColumns: [],
             excelData: [],
             retryTarget: null,
-            // Cooldown
             successSinceCooldown: 0,
             cooldownInterval: null,
             cooldownRemaining: 0,
@@ -1376,6 +1432,9 @@
                     const reader = new FileReader();
                     reader.onload = (ev) => {
                         logoPlaceholder.style.display = 'none';
+                        // Hapus img lama jika ada
+                        const oldImg = logoContainer.querySelector('img');
+                        if (oldImg) oldImg.remove();
                         const img = document.createElement('img');
                         img.src = ev.target.result;
                         img.style.width = '100%';
@@ -2411,7 +2470,7 @@
             renderHistory();
             updateStats();
 
-            console.log('✅ Broadcast WhatsApp Pro ready! By Yudha Prawira');
+            console.log('✅ Broadcast WhatsApp Pro ready! By Yudha Prawira (@yudha.reviewer)');
             console.log(`📱 ${state.contacts.length} kontak, ${Object.keys(state.templates).length} template, ${state.history.length} history`);
         }
 
