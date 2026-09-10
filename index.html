@@ -962,6 +962,26 @@
             min-width: 80px;
         }
 
+        .modal-box .modal-actions .btn-lanjut {
+            background: linear-gradient(135deg, #4f46e5, #8b5cf6);
+            color: #fff;
+            font-size: 15px;
+            padding: 14px;
+            flex: 1 1 100%;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+            animation: pulseLanjut 1.5s ease-in-out infinite;
+        }
+
+        .modal-box .modal-actions .btn-lanjut:hover {
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.5);
+            transform: translateY(-2px);
+        }
+
+        @keyframes pulseLanjut {
+            0%, 100% { box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); }
+            50% { box-shadow: 0 4px 20px rgba(79, 70, 229, 0.6); }
+        }
+
         /* ===== TOAST ===== */
         #toastContainer {
             position: fixed;
@@ -1326,14 +1346,11 @@
                 <div class="name" id="previewName">Nama Kontak</div>
                 <div class="phone" id="previewPhone">+6281234567890</div>
             </div>
-            <div class="warning-box">
+            <div class="warning-box" id="warningBox">
                 ⚠️ <strong>Pastikan pesan sudah terkirim</strong> sebelum melanjutkan ke kontak berikutnya.
             </div>
-            <div class="modal-actions">
-                <button class="btn btn-success" id="confirmSuccess">✅ Berhasil</button>
-                <button class="btn btn-danger" id="confirmFailed">❌ Gagal</button>
-                <button class="btn btn-warning" id="confirmRetry">🔄 Ulangi</button>
-                <button class="btn btn-outline" id="confirmStop">⏹️ Stop</button>
+            <div class="modal-actions" id="modalActions">
+                <!-- Tombol akan di-render oleh JavaScript -->
             </div>
         </div>
     </div>
@@ -1400,6 +1417,8 @@
         const skipCooldownBtn = $('skipCooldownBtn');
         const skipInfo = $('skipInfo');
         const skipInfoText = $('skipInfoText');
+        const modalActions = $('modalActions');
+        const warningBox = $('warningBox');
 
         // ================================================================
         // ========== TOAST ==========
@@ -1432,7 +1451,6 @@
                     const reader = new FileReader();
                     reader.onload = (ev) => {
                         logoPlaceholder.style.display = 'none';
-                        // Hapus img lama jika ada
                         const oldImg = logoContainer.querySelector('img');
                         if (oldImg) oldImg.remove();
                         const img = document.createElement('img');
@@ -1872,7 +1890,6 @@
 
                 const timeStr = item.timestamp ? new Date(item.timestamp).toLocaleString('id-ID') : '-';
 
-                // ===== TOMBOL AKSI =====
                 let actionButtons = '';
                 if (isPending) {
                     actionButtons = `
@@ -1968,26 +1985,20 @@
             confirmTitle.textContent = `🔄 Ulangi Kirim ke ${name}`;
             confirmSubtitle.textContent = 'Apakah pesan berhasil terkirim pada percobaan ulang?';
 
+            warningBox.style.display = 'block';
+            warningBox.innerHTML = '⚠️ <strong>Pastikan pesan sudah terkirim</strong> sebelum melanjutkan.';
+
+            // Render tombol konfirmasi
+            modalActions.innerHTML = `
+                <button class="btn btn-success" id="confirmSuccess">✅ Berhasil</button>
+                <button class="btn btn-danger" id="confirmFailed">❌ Gagal</button>
+                <button class="btn btn-warning" id="confirmRetry">🔄 Ulangi</button>
+            `;
+
             confirmModal.classList.add('active');
-
-            const successBtn = $('confirmSuccess');
-            const failedBtn = $('confirmFailed');
-            const retryBtn = $('confirmRetry');
-            const stopBtn = $('confirmStop');
-
-            stopBtn.style.display = 'none';
-
-            const newSuccess = successBtn.cloneNode(true);
-            const newFailed = failedBtn.cloneNode(true);
-            const newRetry = retryBtn.cloneNode(true);
-
-            successBtn.parentNode.replaceChild(newSuccess, successBtn);
-            failedBtn.parentNode.replaceChild(newFailed, failedBtn);
-            retryBtn.parentNode.replaceChild(newRetry, retryBtn);
 
             $('confirmSuccess').onclick = () => {
                 confirmModal.classList.remove('active');
-                $('confirmStop').style.display = 'block';
                 if (state.retryTarget) {
                     const item = state.history[state.retryTarget.index];
                     if (item) {
@@ -2003,7 +2014,6 @@
 
             $('confirmFailed').onclick = () => {
                 confirmModal.classList.remove('active');
-                $('confirmStop').style.display = 'block';
                 if (state.retryTarget) {
                     const item = state.history[state.retryTarget.index];
                     if (item) {
@@ -2085,14 +2095,14 @@
             const ws = XLSX.utils.json_to_sheet(data);
 
             ws['!cols'] = [
-                { wch: 5 },   // No
-                { wch: 25 },  // Nama
-                { wch: 18 },  // Nomor HP
-                { wch: 12 },  // Status
-                { wch: 50 },  // Pesan
-                { wch: 20 },  // Waktu Kirim
-                { wch: 20 },  // Waktu Konfirmasi
-                { wch: 12 }   // Jumlah Ulang
+                { wch: 5 },
+                { wch: 25 },
+                { wch: 18 },
+                { wch: 12 },
+                { wch: 50 },
+                { wch: 20 },
+                { wch: 20 },
+                { wch: 12 }
             ];
 
             const wb = XLSX.utils.book_new();
@@ -2157,7 +2167,7 @@
                         state.cooldownInterval = null;
                         state.isCooldownActive = false;
                         cooldownContainer.classList.remove('active');
-                        showToast('✅ Cooldown selesai! Lanjut kirim...', 'success');
+                        showToast('✅ Cooldown selesai! Siap lanjut kirim berikutnya.', 'success');
                         resolve();
                     }
                 }, 1000);
@@ -2254,7 +2264,7 @@
                 const percent = Math.round(((i + 1) / total) * 100);
                 progressFill.style.width = percent + '%';
                 progressPercent.textContent = percent + '%';
-                progressText.textContent = `Mengirim ke ${i + 1}/${total} - ${contact.name}`;
+                progressText.textContent = `Kontak ${i + 1}/${total} - ${contact.name}`;
 
                 let personalMessage = message
                     .replace(/{nama}/g, contact.name)
@@ -2282,11 +2292,23 @@
                 };
                 state.history.push(historyItem);
 
+                // ===== LANGKAH 1: TAMPILKAN TOMBOL "LANJUT" DULU =====
+                const lanjutResult = await showLanjutModal(contact.name, contact.phone, i + 1, total);
+
+                if (lanjutResult === 'stop') {
+                    sendAbort = true;
+                    historyItem.status = 'pending';
+                    showToast('⏹️ Broadcast dihentikan', 'warning');
+                    break;
+                }
+
+                // ===== LANGKAH 2: BUKA WHATSAPP =====
                 const phone = contact.phone.replace('+', '');
                 const encodedMessage = encodeURIComponent(personalMessage);
                 const url = `https://wa.me/${phone}?text=${encodedMessage}`;
                 window.open(url, '_blank');
 
+                // ===== LANGKAH 3: TAMPILKAN TOMBOL KONFIRMASI =====
                 const confirmed = await showConfirmModal(contact.name, contact.phone, i + 1, total);
 
                 if (confirmed === 'stop') {
@@ -2345,33 +2367,62 @@
         }
 
         // ================================================================
-        // ========== CONFIRM MODAL ==========
+        // ========== MODAL: LANJUT (Setelah Cooldown / Kontak Baru) ==========
+        // ================================================================
+        function showLanjutModal(name, phone, index, total) {
+            return new Promise((resolve) => {
+                previewName.textContent = name;
+                previewPhone.textContent = phone;
+                confirmTitle.textContent = `📤 Kontak ${index}/${total}`;
+                confirmSubtitle.textContent = 'Klik Lanjut untuk membuka WhatsApp kontak ini';
+
+                warningBox.style.display = 'block';
+                warningBox.innerHTML = '💡 <strong>Klik Lanjut</strong> untuk membuka chat WhatsApp dengan pesan yang sudah disiapkan.';
+
+                // HANYA TAMPILKAN TOMBOL LANJUT + STOP
+                modalActions.innerHTML = `
+                    <button class="btn btn-lanjut" id="confirmLanjut">▶️ Lanjut</button>
+                    <button class="btn btn-outline" id="confirmStopLanjut" style="flex: 1 1 100%;">⏹️ Stop Broadcast</button>
+                `;
+
+                confirmModal.classList.add('active');
+
+                $('confirmLanjut').onclick = () => {
+                    confirmModal.classList.remove('active');
+                    resolve('lanjut');
+                };
+
+                $('confirmStopLanjut').onclick = () => {
+                    if (confirm('⏹️ Hentikan broadcast? Data yang sudah terkirim akan tetap tersimpan di history.')) {
+                        confirmModal.classList.remove('active');
+                        resolve('stop');
+                    }
+                };
+            });
+        }
+
+        // ================================================================
+        // ========== MODAL: KONFIRMASI (Setelah WhatsApp Dibuka) ==========
         // ================================================================
         function showConfirmModal(name, phone, index, total) {
             return new Promise((resolve) => {
                 previewName.textContent = name;
                 previewPhone.textContent = phone;
-                confirmTitle.textContent = `📤 ${index}/${total} - Kirim ke ${name}`;
+                confirmTitle.textContent = `📤 Konfirmasi ${index}/${total}`;
                 confirmSubtitle.textContent = 'Apakah pesan berhasil terkirim?';
 
+                warningBox.style.display = 'block';
+                warningBox.innerHTML = '⚠️ <strong>Pastikan pesan sudah terkirim</strong> sebelum melanjutkan ke kontak berikutnya.';
+
+                // TAMPILKAN TOMBOL KONFIRMASI
+                modalActions.innerHTML = `
+                    <button class="btn btn-success" id="confirmSuccess">✅ Berhasil</button>
+                    <button class="btn btn-danger" id="confirmFailed">❌ Gagal</button>
+                    <button class="btn btn-warning" id="confirmRetry">🔄 Ulangi</button>
+                    <button class="btn btn-outline" id="confirmStop">⏹️ Stop</button>
+                `;
+
                 confirmModal.classList.add('active');
-
-                const successBtn = $('confirmSuccess');
-                const failedBtn = $('confirmFailed');
-                const retryBtn = $('confirmRetry');
-                const stopBtn = $('confirmStop');
-
-                stopBtn.style.display = 'block';
-
-                const newSuccess = successBtn.cloneNode(true);
-                const newFailed = failedBtn.cloneNode(true);
-                const newRetry = retryBtn.cloneNode(true);
-                const newStop = stopBtn.cloneNode(true);
-
-                successBtn.parentNode.replaceChild(newSuccess, successBtn);
-                failedBtn.parentNode.replaceChild(newFailed, failedBtn);
-                retryBtn.parentNode.replaceChild(newRetry, retryBtn);
-                stopBtn.parentNode.replaceChild(newStop, stopBtn);
 
                 $('confirmSuccess').onclick = () => {
                     confirmModal.classList.remove('active');
