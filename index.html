@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Broadcast WhatsApp Pro</title>
+    <title>Broadcast WhatsApp Pro - By Yudha Prawira</title>
     <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
     <style>
         /* ================================================================ */
@@ -114,12 +114,20 @@
             background: linear-gradient(135deg, var(--primary), #8b5cf6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            line-height: 1.2;
         }
 
-        .header-title p {
-            font-size: 13px;
+        .header-title .by-credit {
+            font-size: 11px;
             color: var(--gray);
             margin-top: 2px;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+
+        .header-title .by-credit strong {
+            color: var(--primary);
+            font-weight: 700;
         }
 
         .header-stats {
@@ -1070,7 +1078,7 @@
                 </div>
                 <div class="header-title">
                     <h1>Broadcast WhatsApp Pro</h1>
-                    <p>Cooldown otomatis 5 menit per 5 nomor sukses</p>
+                    <div class="by-credit">By <strong>Yudha Prawira</strong></div>
                 </div>
             </div>
             <div class="header-stats">
@@ -1298,8 +1306,8 @@
             skipCooldown: false,
         };
 
-        const COOLDOWN_LIMIT = 5;       // Setiap 5 nomor sukses
-        const COOLDOWN_DURATION = 300;  // 5 menit = 300 detik
+        const COOLDOWN_LIMIT = 5;
+        const COOLDOWN_DURATION = 300;
 
         // ================================================================
         // ========== DOM REFS ==========
@@ -1396,13 +1404,11 @@
             return clean.length >= 10 && clean.length <= 15;
         }
 
-        // ===== CEK APAKAH NOMOR SUDAH ADA DI HISTORY =====
         function isPhoneInHistory(phone) {
             const formatted = formatPhone(phone);
             return state.history.some(h => h.phone === formatted);
         }
 
-        // ===== CEK APAKAH NOMOR SUDAH ADA DI CONTACTS =====
         function isPhoneInContacts(phone) {
             const formatted = formatPhone(phone);
             return state.contacts.some(c => c.phone === formatted);
@@ -1420,7 +1426,6 @@
                 return false;
             }
 
-            // Cek apakah sudah ada di history
             if (isPhoneInHistory(phone)) {
                 showToast(`⚠️ Nomor ${formatted} sudah ada di history! Diabaikan.`, 'warning');
                 return false;
@@ -1566,14 +1571,12 @@
                         if (phone && phone.length >= 10) {
                             const formatted = formatPhone(phone);
 
-                            // ===== CEK SKIP: Sudah ada di history =====
                             if (isPhoneInHistory(formatted)) {
                                 skippedHistory++;
                                 skipped++;
                                 return;
                             }
 
-                            // ===== CEK SKIP: Sudah ada di contacts =====
                             if (isPhoneInContacts(formatted)) {
                                 skipped++;
                                 return;
@@ -1601,7 +1604,6 @@
 
                     renderContacts();
 
-                    // Tampilkan info skip
                     if (skippedHistory > 0) {
                         skipInfo.style.display = 'block';
                         skipInfoText.textContent = `${skippedHistory} nomor diabaikan karena sudah ada di history`;
@@ -1811,6 +1813,24 @@
 
                 const timeStr = item.timestamp ? new Date(item.timestamp).toLocaleString('id-ID') : '-';
 
+                // ===== TOMBOL AKSI =====
+                let actionButtons = '';
+                if (isPending) {
+                    actionButtons = `
+                        <button class="action-btn confirm" onclick="event.stopPropagation(); confirmHistoryItem(${index})" title="Konfirmasi Terkirim">✅</button>
+                        <button class="action-btn fail" onclick="event.stopPropagation(); failHistoryItem(${index})" title="Tandai Gagal">❌</button>
+                        <button class="action-btn retry" onclick="event.stopPropagation(); retryHistoryItem(${index})" title="Ulangi Kirim">🔄</button>
+                    `;
+                } else if (isFailed) {
+                    actionButtons = `
+                        <button class="action-btn retry" onclick="event.stopPropagation(); retryHistoryItem(${index})" title="Ulangi Kirim">🔄 Ulangi</button>
+                    `;
+                } else if (isSuccess) {
+                    actionButtons = `
+                        <button class="action-btn" style="background:#d1fae5; color:#065f46;" onclick="event.stopPropagation(); showDetailHistory(${index})" title="Detail">📋</button>
+                    `;
+                }
+
                 return `
                     <div class="history-item">
                         <span class="status-icon ${statusClass}">${statusIcon}</span>
@@ -1823,16 +1843,7 @@
                         </div>
                         <div class="time">${timeStr}</div>
                         <div style="display:flex; gap:4px; flex-wrap:wrap;">
-                            ${isPending ? `
-                                <button class="action-btn confirm" onclick="confirmHistoryItem(${index})">✅</button>
-                                <button class="action-btn fail" onclick="failHistoryItem(${index})">❌</button>
-                            ` : ''}
-                            ${isFailed ? `
-                                <button class="action-btn retry" onclick="retryHistoryItem(${index})">🔄 Ulangi</button>
-                            ` : ''}
-                            ${isSuccess ? `
-                                <button class="action-btn" style="background:#d1fae5; color:#065f46;" onclick="showDetailHistory(${index})">📋</button>
-                            ` : ''}
+                            ${actionButtons}
                         </div>
                     </div>
                 `;
@@ -1873,7 +1884,11 @@
 
         function retryHistoryItem(index) {
             const item = state.history[index];
-            if (!item || item.status !== 'failed') return;
+            if (!item) return;
+            if (item.status === 'success') {
+                showToast('⚠️ Item sudah terkirim, tidak perlu ulang', 'warning');
+                return;
+            }
 
             state.retryTarget = {
                 index: index,
@@ -1896,13 +1911,11 @@
 
             confirmModal.classList.add('active');
 
-            // Setup tombol
             const successBtn = $('confirmSuccess');
             const failedBtn = $('confirmFailed');
             const retryBtn = $('confirmRetry');
             const stopBtn = $('confirmStop');
 
-            // Hide stop di mode retry
             stopBtn.style.display = 'none';
 
             const newSuccess = successBtn.cloneNode(true);
@@ -1990,7 +2003,6 @@
                 return;
             }
 
-            // Prepare data untuk Excel
             const data = state.history.map((item, index) => {
                 const timeStr = item.timestamp ? new Date(item.timestamp).toLocaleString('id-ID') : '-';
                 const confirmTime = item.confirmed_at ? new Date(item.confirmed_at).toLocaleString('id-ID') : '-';
@@ -2011,10 +2023,8 @@
                 };
             });
 
-            // Buat worksheet
             const ws = XLSX.utils.json_to_sheet(data);
 
-            // Set column width
             ws['!cols'] = [
                 { wch: 5 },   // No
                 { wch: 25 },  // Nama
@@ -2026,11 +2036,9 @@
                 { wch: 12 }   // Jumlah Ulang
             ];
 
-            // Buat workbook
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, 'History Broadcast');
 
-            // Nama file dengan tanggal
             const now = new Date();
             const dateStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
             const timeStr = `${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}`;
@@ -2066,13 +2074,11 @@
             updateCooldownDisplay();
 
             return new Promise((resolve) => {
-                // Clear existing interval
                 if (state.cooldownInterval) {
                     clearInterval(state.cooldownInterval);
                 }
 
                 state.cooldownInterval = setInterval(() => {
-                    // Cek skip
                     if (state.skipCooldown) {
                         clearInterval(state.cooldownInterval);
                         state.cooldownInterval = null;
@@ -2107,7 +2113,6 @@
             cooldownTimer.textContent = display;
             cooldownCountText.textContent = Math.ceil(state.cooldownRemaining / 60);
 
-            // Update progress bar
             const percent = ((COOLDOWN_DURATION - state.cooldownRemaining) / COOLDOWN_DURATION) * 100;
             cooldownProgressFill.style.width = percent + '%';
         }
@@ -2192,14 +2197,12 @@
                 progressPercent.textContent = percent + '%';
                 progressText.textContent = `Mengirim ke ${i + 1}/${total} - ${contact.name}`;
 
-                // Personalisasi pesan
                 let personalMessage = message
                     .replace(/{nama}/g, contact.name)
                     .replace(/{hp}/g, contact.phone)
                     .replace(/{index}/g, i + 1)
                     .replace(/{total}/g, total);
 
-                // Variabel dari extra data
                 if (contact.extra) {
                     Object.keys(contact.extra).forEach(key => {
                         const regex = new RegExp(`\\{${key}\\}`, 'g');
@@ -2207,7 +2210,6 @@
                     });
                 }
 
-                // Simpan history
                 const historyItem = {
                     id: Date.now() + '_' + i,
                     name: contact.name,
@@ -2221,13 +2223,11 @@
                 };
                 state.history.push(historyItem);
 
-                // Buka WhatsApp
                 const phone = contact.phone.replace('+', '');
                 const encodedMessage = encodeURIComponent(personalMessage);
                 const url = `https://wa.me/${phone}?text=${encodedMessage}`;
                 window.open(url, '_blank');
 
-                // Tampilkan modal konfirmasi
                 const confirmed = await showConfirmModal(contact.name, contact.phone, i + 1, total);
 
                 if (confirmed === 'stop') {
@@ -2254,18 +2254,10 @@
 
                 saveHistory();
 
-                // ===== CEK COOLDOWN: Setiap 5 nomor SUKSES =====
                 if (state.successSinceCooldown >= COOLDOWN_LIMIT && i < total - 1 && !sendAbort) {
-                    // Reset counter
                     state.successSinceCooldown = 0;
-
-                    // Tampilkan notif
                     showToast(`⏳ Sudah 5 nomor sukses! Cooldown 5 menit dimulai...`, 'warning', 5000);
-
-                    // Pause broadcast (async)
                     await startCooldown();
-
-                    // Cek apakah abort selama cooldown
                     if (sendAbort) break;
                 }
 
@@ -2310,7 +2302,6 @@
                 const retryBtn = $('confirmRetry');
                 const stopBtn = $('confirmStop');
 
-                // Reset stop button display
                 stopBtn.style.display = 'block';
 
                 const newSuccess = successBtn.cloneNode(true);
@@ -2335,7 +2326,6 @@
 
                 $('confirmRetry').onclick = () => {
                     confirmModal.classList.remove('active');
-                    // Buka ulang WhatsApp
                     const phone = previewPhone.textContent.replace('+', '');
                     const message = messageInput.value.trim();
                     let personalMessage = message
@@ -2421,9 +2411,8 @@
             renderHistory();
             updateStats();
 
-            console.log('✅ Broadcast WhatsApp Pro ready!');
+            console.log('✅ Broadcast WhatsApp Pro ready! By Yudha Prawira');
             console.log(`📱 ${state.contacts.length} kontak, ${Object.keys(state.templates).length} template, ${state.history.length} history`);
-            console.log(`⏳ Cooldown: ${COOLDOWN_DURATION}s per ${COOLDOWN_LIMIT} nomor sukses`);
         }
 
         document.addEventListener('DOMContentLoaded', init);
