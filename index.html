@@ -30,7 +30,6 @@
             --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             --radius: 16px;
             --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            --tiktok: #000000;
         }
 
         body {
@@ -175,10 +174,17 @@
             font-size: 10px;
         }
 
-        /* ===== HEADER STATS ===== */
+        /* ===== HEADER RIGHT ===== */
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
         .header-stats {
             display: flex;
-            gap: 16px;
+            gap: 10px;
             flex-wrap: wrap;
         }
 
@@ -186,11 +192,11 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             color: var(--gray);
             background: #f1f5f9;
-            padding: 6px 16px;
+            padding: 6px 14px;
             border-radius: 30px;
         }
 
@@ -201,6 +207,58 @@
 
         .stat-badge .pending-count {
             color: var(--warning);
+        }
+
+        /* ===== SETTINGS BUTTON ===== */
+        .settings-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+            background: #eef2ff;
+            padding: 8px 14px;
+            border-radius: 12px;
+            border: 1.5px solid transparent;
+            cursor: pointer;
+            transition: all var(--transition);
+            white-space: nowrap;
+        }
+
+        .settings-btn:hover {
+            background: linear-gradient(135deg, var(--primary), #8b5cf6);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        .settings-btn .gear {
+            font-size: 14px;
+            transition: transform 0.4s;
+        }
+
+        .settings-btn:hover .gear {
+            transform: rotate(180deg);
+        }
+
+        /* ===== COOLDOWN INDICATOR ===== */
+        .cooldown-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #92400e;
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            padding: 8px 14px;
+            border-radius: 12px;
+            border: 1.5px solid #f59e0b;
+            white-space: nowrap;
+        }
+
+        .cooldown-indicator .icon {
+            font-size: 14px;
         }
 
         /* ===== GRID ===== */
@@ -982,6 +1040,150 @@
             50% { box-shadow: 0 4px 20px rgba(79, 70, 229, 0.6); }
         }
 
+        /* ===== SETTINGS MODAL ===== */
+        .settings-modal-box {
+            max-width: 480px;
+        }
+
+        .settings-section {
+            background: #f8fafc;
+            border-radius: 14px;
+            padding: 16px 20px;
+            margin-bottom: 14px;
+            border: 1px solid var(--border);
+        }
+
+        .settings-section-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .settings-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .settings-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .settings-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .settings-field label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--gray);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .settings-field .input-wrap {
+            position: relative;
+        }
+
+        .settings-field input {
+            width: 100%;
+            padding: 10px 40px 10px 14px;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--dark);
+            background: #fff;
+            transition: all var(--transition);
+        }
+
+        .settings-field input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.08);
+        }
+
+        .settings-field .suffix {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--gray);
+            pointer-events: none;
+        }
+
+        .settings-preview {
+            background: linear-gradient(135deg, #eef2ff, #e0e7ff);
+            border-radius: 12px;
+            padding: 12px 16px;
+            text-align: center;
+            margin-bottom: 14px;
+            border: 1px solid #c7d2fe;
+        }
+
+        .settings-preview-label {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .settings-preview-value {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .settings-preview-desc {
+            font-size: 11px;
+            color: var(--gray);
+            margin-top: 4px;
+        }
+
+        .settings-presets {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        .preset-btn {
+            flex: 1;
+            padding: 8px 10px;
+            font-size: 11px;
+            font-weight: 600;
+            border: 1.5px solid var(--border);
+            background: #fff;
+            color: var(--gray);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all var(--transition);
+            white-space: nowrap;
+        }
+
+        .preset-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: #eef2ff;
+        }
+
+        .preset-btn.active {
+            background: linear-gradient(135deg, var(--primary), #8b5cf6);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
         /* ===== TOAST ===== */
         #toastContainer {
             position: fixed;
@@ -1065,13 +1267,16 @@
                 flex-direction: column;
                 align-items: flex-start;
             }
-            .header-stats {
+            .header-right {
                 width: 100%;
-                justify-content: flex-start;
+                justify-content: space-between;
+            }
+            .header-stats {
+                flex-wrap: wrap;
             }
             .stat-badge {
-                font-size: 12px;
-                padding: 4px 12px;
+                font-size: 11px;
+                padding: 4px 10px;
             }
             .grid-3 {
                 grid-template-columns: 1fr;
@@ -1091,6 +1296,9 @@
             .modal-box .modal-actions .btn {
                 min-width: 100%;
             }
+            .settings-row {
+                grid-template-columns: 1fr;
+            }
         }
 
         @media (max-width: 480px) {
@@ -1101,10 +1309,6 @@
                 width: 42px;
                 height: 42px;
             }
-            .stat-badge {
-                font-size: 11px;
-                padding: 4px 10px;
-            }
             .btn {
                 font-size: 12px;
                 padding: 8px 14px;
@@ -1114,6 +1318,10 @@
             }
             .by-credit {
                 font-size: 10px;
+            }
+            .settings-btn {
+                font-size: 11px;
+                padding: 6px 10px;
             }
         }
 
@@ -1158,10 +1366,20 @@
                     </a>
                 </div>
             </div>
-            <div class="header-stats">
-                <div class="stat-badge">📱 Kontak: <span id="contactCountTotal">0</span></div>
-                <div class="stat-badge">✅ Terkirim: <span id="sentCount">0</span></div>
-                <div class="stat-badge">⏳ Pending: <span class="pending-count" id="pendingCount">0</span></div>
+            <div class="header-right">
+                <div class="header-stats">
+                    <div class="stat-badge">📱 <span id="contactCountTotal">0</span></div>
+                    <div class="stat-badge">✅ <span id="sentCount">0</span></div>
+                    <div class="stat-badge">⏳ <span class="pending-count" id="pendingCount">0</span></div>
+                </div>
+                <div class="cooldown-indicator" id="cooldownIndicator" title="Setting Cooldown saat ini">
+                    <span class="icon">⏳</span>
+                    <span id="cooldownIndicatorText">5m / 5 nomor</span>
+                </div>
+                <button class="settings-btn" id="openSettingsBtn" title="Pengaturan Cooldown">
+                    <span class="gear">⚙️</span>
+                    <span>Setting Cooldown</span>
+                </button>
             </div>
         </header>
 
@@ -1174,7 +1392,6 @@
                     <span class="badge" id="contactBadge">0</span>
                 </div>
 
-                <!-- Upload Excel -->
                 <div class="form-group">
                     <label>📥 Import dari Excel</label>
                     <div class="drop-zone" id="dropZone">
@@ -1186,20 +1403,17 @@
                     <div id="fileInfo"></div>
                 </div>
 
-                <!-- Preview Kolom Excel -->
                 <div id="excelColumns" style="display:none; margin-bottom: 10px; padding: 8px 12px; background: #f1f5f9; border-radius: 8px; font-size: 12px;">
                     <strong>📊 Kolom yang terdeteksi:</strong>
                     <span id="columnList" style="color: var(--primary);"></span>
                     <span class="input-hint">Variabel: <code>{nama}</code> untuk nama, <code>{hp}</code> untuk nomor, dan lainnya</span>
                 </div>
 
-                <!-- Info skip history -->
                 <div id="skipInfo" style="display:none; margin-bottom: 10px; padding: 8px 12px; background: #fef3c7; border-radius: 8px; font-size: 12px; border-left: 3px solid var(--warning);">
                     <strong>⏭️ Info Skip:</strong>
                     <span id="skipInfoText"></span>
                 </div>
 
-                <!-- Tambah Manual -->
                 <div class="form-group">
                     <label>Tambah Kontak Manual</label>
                     <div style="display: flex; gap: 8px; flex-wrap: wrap;">
@@ -1210,7 +1424,6 @@
                     <span class="input-hint">Format nomor: 81234567890 (tanpa +62)</span>
                 </div>
 
-                <!-- Daftar Kontak -->
                 <div class="contact-count">
                     <span>📱 <strong id="contactCount">0</strong> kontak</span>
                     <button class="clear-btn" id="clearAllContacts">🗑️ Hapus Semua</button>
@@ -1227,7 +1440,6 @@
                     <span class="badge" id="templateBadge">📝</span>
                 </div>
 
-                <!-- Template Select -->
                 <div class="form-group">
                     <label>📁 Pilih Template</label>
                     <select class="form-control" id="templateSelect">
@@ -1235,20 +1447,17 @@
                     </select>
                 </div>
 
-                <!-- Template Actions -->
                 <div class="template-actions">
                     <button class="btn btn-outline btn-sm" id="saveTemplateBtn">💾 Simpan</button>
                     <button class="btn btn-danger btn-sm" id="deleteTemplateBtn">🗑️ Hapus</button>
                 </div>
 
-                <!-- Message -->
                 <div class="form-group" style="margin-top: 10px;">
                     <label>📝 Pesan <span class="required">*</span></label>
                     <textarea class="form-control" id="messageInput" rows="5" placeholder="Tulis pesan broadcast..."></textarea>
                     <span class="input-hint">Gunakan variabel dari Excel: <code>{nama}</code>, <code>{hp}</code>, dll</span>
                 </div>
 
-                <!-- Variable Hint -->
                 <div class="variable-hint">
                     <details>
                         <summary>💡 Variabel yang tersedia</summary>
@@ -1264,17 +1473,15 @@
                     </details>
                 </div>
 
-                <!-- Kirim -->
                 <div style="margin-top: 14px;">
                     <button class="btn btn-success btn-block" id="sendBroadcastBtn">
                         📤 Kirim Broadcast
                     </button>
-                    <div style="margin-top: 6px; font-size: 11px; color: var(--gray); text-align: center;">
-                        ⚠️ Cooldown otomatis 5 menit setiap 5 nomor sukses
+                    <div style="margin-top: 6px; font-size: 11px; color: var(--gray); text-align: center;" id="cooldownInfoText">
+                        ⏳ Cooldown otomatis 5 menit setiap 5 nomor sukses
                     </div>
                 </div>
 
-                <!-- Progress -->
                 <div class="progress-container" id="progressContainer">
                     <div class="progress-bar-track">
                         <div class="progress-bar-fill" id="progressFill"></div>
@@ -1285,7 +1492,6 @@
                     </div>
                 </div>
 
-                <!-- Cooldown Timer -->
                 <div class="cooldown-container" id="cooldownContainer">
                     <div class="cooldown-title">⏳ COOLDOWN AKTIF</div>
                     <div class="cooldown-timer" id="cooldownTimer">05:00</div>
@@ -1306,7 +1512,6 @@
                     <span class="badge warning" id="historyBadge">0</span>
                 </div>
 
-                <!-- Filter -->
                 <div class="form-group" style="margin-bottom: 10px;">
                     <select class="form-control" id="historyFilter" style="padding: 6px 12px; font-size: 12px;">
                         <option value="all">📋 Semua</option>
@@ -1316,7 +1521,6 @@
                     </select>
                 </div>
 
-                <!-- List -->
                 <div class="history-list" id="historyList">
                     <div class="history-empty">
                         <span class="icon">📭</span>
@@ -1324,7 +1528,6 @@
                     </div>
                 </div>
 
-                <!-- Actions -->
                 <div class="history-actions">
                     <button class="btn btn-primary btn-sm" id="downloadHistoryBtn" style="flex:1;">
                         📥 Download Excel
@@ -1349,8 +1552,86 @@
             <div class="warning-box" id="warningBox">
                 ⚠️ <strong>Pastikan pesan sudah terkirim</strong> sebelum melanjutkan ke kontak berikutnya.
             </div>
-            <div class="modal-actions" id="modalActions">
-                <!-- Tombol akan di-render oleh JavaScript -->
+            <div class="modal-actions" id="modalActions"></div>
+        </div>
+    </div>
+
+    <!-- ===== MODAL SETTINGS COOLDOWN ===== -->
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal-box settings-modal-box">
+            <h3>⚙️ Pengaturan Cooldown</h3>
+            <div class="subtitle">Atur berapa nomor sukses dan berapa lama waktu jeda sebelum lanjut kirim</div>
+
+            <!-- Preview -->
+            <div class="settings-preview">
+                <div class="settings-preview-label">Preview Cooldown</div>
+                <div class="settings-preview-value" id="settingsPreviewValue">5 menit / 5 nomor</div>
+                <div class="settings-preview-desc" id="settingsPreviewDesc">
+                    Setiap 5 nomor sukses, jeda 5 menit sebelum lanjut
+                </div>
+            </div>
+
+            <!-- Section: Nomor Sukses -->
+            <div class="settings-section">
+                <div class="settings-section-title">
+                    📊 Setiap berapa nomor sukses?
+                </div>
+                <div class="settings-row">
+                    <div class="settings-field">
+                        <label>Jumlah Nomor</label>
+                        <div class="input-wrap">
+                            <input type="number" id="settingsLimitInput" min="1" max="100" value="5">
+                            <span class="suffix">nomor</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="settings-presets">
+                    <button class="preset-btn" data-limit="3">3</button>
+                    <button class="preset-btn active" data-limit="5">5</button>
+                    <button class="preset-btn" data-limit="10">10</button>
+                    <button class="preset-btn" data-limit="20">20</button>
+                    <button class="preset-btn" data-limit="50">50</button>
+                </div>
+            </div>
+
+            <!-- Section: Waktu Cooldown -->
+            <div class="settings-section">
+                <div class="settings-section-title">
+                    ⏳ Berapa lama waktu cooldown?
+                </div>
+                <div class="settings-row">
+                    <div class="settings-field">
+                        <label>Menit</label>
+                        <div class="input-wrap">
+                            <input type="number" id="settingsMinutesInput" min="0" max="60" value="5">
+                            <span class="suffix">mnt</span>
+                        </div>
+                    </div>
+                    <div class="settings-field">
+                        <label>Detik</label>
+                        <div class="input-wrap">
+                            <input type="number" id="settingsSecondsInput" min="0" max="59" value="0">
+                            <span class="suffix">dtk</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="settings-presets">
+                    <button class="preset-btn" data-seconds="60">1 menit</button>
+                    <button class="preset-btn" data-seconds="120">2 menit</button>
+                    <button class="preset-btn active" data-seconds="300">5 menit</button>
+                    <button class="preset-btn" data-seconds="600">10 menit</button>
+                    <button class="preset-btn" data-seconds="1800">30 menit</button>
+                </div>
+            </div>
+
+            <div class="warning-box" style="margin-top: 14px; margin-bottom: 0;">
+                💡 <strong>Info:</strong> Setting ini disimpan otomatis dan akan diterapkan pada broadcast berikutnya.
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn btn-primary" id="saveSettingsBtn">💾 Simpan Setting</button>
+                <button class="btn btn-danger" id="resetSettingsBtn" style="flex: 0 0 auto; min-width: 100px;">↺ Reset</button>
+                <button class="btn btn-outline" id="cancelSettingsBtn">❌ Batal</button>
             </div>
         </div>
     </div>
@@ -1377,10 +1658,12 @@
             cooldownRemaining: 0,
             isCooldownActive: false,
             skipCooldown: false,
+            // ===== SETTINGS COOLDOWN =====
+            settings: {
+                limit: 5,           // default 5 nomor
+                duration: 300       // default 300 detik (5 menit)
+            }
         };
-
-        const COOLDOWN_LIMIT = 5;
-        const COOLDOWN_DURATION = 300;
 
         // ================================================================
         // ========== DOM REFS ==========
@@ -1403,6 +1686,7 @@
         const historyBadge = $('historyBadge');
         const historyFilter = $('historyFilter');
         const confirmModal = $('confirmModal');
+        const settingsModal = $('settingsModal');
         const previewName = $('previewName');
         const previewPhone = $('previewPhone');
         const confirmTitle = $('confirmTitle');
@@ -1419,6 +1703,8 @@
         const skipInfoText = $('skipInfoText');
         const modalActions = $('modalActions');
         const warningBox = $('warningBox');
+        const cooldownIndicatorText = $('cooldownIndicatorText');
+        const cooldownInfoText = $('cooldownInfoText');
 
         // ================================================================
         // ========== TOAST ==========
@@ -1435,6 +1721,185 @@
             setTimeout(() => {
                 if (toast.parentElement) toast.remove();
             }, duration);
+        }
+
+        // ================================================================
+        // ========== SETTINGS COOLDOWN ==========
+        // ================================================================
+        const SETTINGS_STORAGE_KEY = 'broadcast_settings_cooldown';
+
+        function loadSettings() {
+            try {
+                const saved = localStorage.getItem(SETTINGS_STORAGE_KEY);
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    if (parsed.limit && parsed.duration) {
+                        state.settings.limit = parsed.limit;
+                        state.settings.duration = parsed.duration;
+                    }
+                }
+            } catch (e) {
+                console.error('Load settings error:', e);
+            }
+            updateSettingsUI();
+        }
+
+        function saveSettings() {
+            try {
+                localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(state.settings));
+            } catch (e) {
+                console.error('Save settings error:', e);
+            }
+        }
+
+        function updateSettingsUI() {
+            const limit = state.settings.limit;
+            const duration = state.settings.duration;
+            const minutes = Math.floor(duration / 60);
+            const seconds = duration % 60;
+
+            // Update indicator di header
+            const durationText = formatDurationShort(duration);
+            cooldownIndicatorText.textContent = `${durationText} / ${limit} nomor`;
+
+            // Update info text di kolom kirim
+            cooldownInfoText.textContent = `⏳ Cooldown otomatis ${durationText} setiap ${limit} nomor sukses`;
+
+            // Update preview di settings modal (jika ada)
+            const previewValue = $('settingsPreviewValue');
+            const previewDesc = $('settingsPreviewDesc');
+            if (previewValue) {
+                previewValue.textContent = `${durationText} / ${limit} nomor`;
+            }
+            if (previewDesc) {
+                previewDesc.textContent = `Setiap ${limit} nomor sukses, jeda ${durationText} sebelum lanjut`;
+            }
+        }
+
+        function formatDurationShort(seconds) {
+            if (seconds < 60) return `${seconds}dtk`;
+            const m = Math.floor(seconds / 60);
+            const s = seconds % 60;
+            if (s === 0) return `${m}m`;
+            return `${m}m ${s}dtk`;
+        }
+
+        function formatDurationLong(seconds) {
+            if (seconds < 60) return `${seconds} detik`;
+            const m = Math.floor(seconds / 60);
+            const s = seconds % 60;
+            if (s === 0) return `${m} menit`;
+            return `${m} menit ${s} detik`;
+        }
+
+        function openSettingsModal() {
+            // Isi input dengan nilai saat ini
+            $('settingsLimitInput').value = state.settings.limit;
+
+            const minutes = Math.floor(state.settings.duration / 60);
+            const seconds = state.settings.duration % 60;
+            $('settingsMinutesInput').value = minutes;
+            $('settingsSecondsInput').value = seconds;
+
+            // Update preset aktif
+            updatePresetActive();
+
+            settingsModal.classList.add('active');
+        }
+
+        function closeSettingsModal() {
+            settingsModal.classList.remove('active');
+        }
+
+        function updatePresetActive() {
+            // Preset limit
+            document.querySelectorAll('.preset-btn[data-limit]').forEach(btn => {
+                const limit = parseInt(btn.dataset.limit);
+                btn.classList.toggle('active', limit === state.settings.limit);
+            });
+
+            // Preset duration
+            document.querySelectorAll('.preset-btn[data-seconds]').forEach(btn => {
+                const sec = parseInt(btn.dataset.seconds);
+                btn.classList.toggle('active', sec === state.settings.duration);
+            });
+        }
+
+        function updatePreviewFromInputs() {
+            const limit = parseInt($('settingsLimitInput').value) || 1;
+            const minutes = parseInt($('settingsMinutesInput').value) || 0;
+            const seconds = parseInt($('settingsSecondsInput').value) || 0;
+            const duration = (minutes * 60) + seconds;
+
+            const durationText = formatDurationShort(duration);
+            $('settingsPreviewValue').textContent = `${durationText} / ${limit} nomor`;
+            $('settingsPreviewDesc').textContent = `Setiap ${limit} nomor sukses, jeda ${durationText} sebelum lanjut`;
+        }
+
+        function applyPresetLimit(limit) {
+            $('settingsLimitInput').value = limit;
+            updatePreviewFromInputs();
+            updatePresetActive();
+        }
+
+        function applyPresetSeconds(totalSeconds) {
+            const m = Math.floor(totalSeconds / 60);
+            const s = totalSeconds % 60;
+            $('settingsMinutesInput').value = m;
+            $('settingsSecondsInput').value = s;
+            updatePreviewFromInputs();
+            updatePresetActive();
+        }
+
+        function doSaveSettings() {
+            const limit = parseInt($('settingsLimitInput').value);
+            const minutes = parseInt($('settingsMinutesInput').value) || 0;
+            const seconds = parseInt($('settingsSecondsInput').value) || 0;
+            const duration = (minutes * 60) + seconds;
+
+            // Validasi
+            if (!limit || limit < 1) {
+                showToast('⚠️ Jumlah nomor minimal 1!', 'error');
+                return;
+            }
+
+            if (duration < 5) {
+                showToast('⚠️ Waktu cooldown minimal 5 detik!', 'error');
+                return;
+            }
+
+            if (limit > 100) {
+                showToast('⚠️ Jumlah nomor maksimal 100!', 'error');
+                return;
+            }
+
+            // Simpan
+            state.settings.limit = limit;
+            state.settings.duration = duration;
+            saveSettings();
+            updateSettingsUI();
+            closeSettingsModal();
+
+            showToast(`✅ Setting disimpan: ${formatDurationLong(duration)} / ${limit} nomor`, 'success', 4000);
+        }
+
+        function doResetSettings() {
+            if (!confirm('Reset ke default (5 menit / 5 nomor)?')) return;
+
+            state.settings.limit = 5;
+            state.settings.duration = 300;
+            saveSettings();
+            updateSettingsUI();
+
+            // Update form
+            $('settingsLimitInput').value = 5;
+            $('settingsMinutesInput').value = 5;
+            $('settingsSecondsInput').value = 0;
+
+            updatePreviewFromInputs();
+            updatePresetActive();
+
+            showToast('↺ Setting direset ke default', 'info');
         }
 
         // ================================================================
@@ -1988,7 +2453,6 @@
             warningBox.style.display = 'block';
             warningBox.innerHTML = '⚠️ <strong>Pastikan pesan sudah terkirim</strong> sebelum melanjutkan.';
 
-            // Render tombol konfirmasi
             modalActions.innerHTML = `
                 <button class="btn btn-success" id="confirmSuccess">✅ Berhasil</button>
                 <button class="btn btn-danger" id="confirmFailed">❌ Gagal</button>
@@ -2093,16 +2557,9 @@
             });
 
             const ws = XLSX.utils.json_to_sheet(data);
-
             ws['!cols'] = [
-                { wch: 5 },
-                { wch: 25 },
-                { wch: 18 },
-                { wch: 12 },
-                { wch: 50 },
-                { wch: 20 },
-                { wch: 20 },
-                { wch: 12 }
+                { wch: 5 }, { wch: 25 }, { wch: 18 }, { wch: 12 },
+                { wch: 50 }, { wch: 20 }, { wch: 20 }, { wch: 12 }
             ];
 
             const wb = XLSX.utils.book_new();
@@ -2114,7 +2571,6 @@
             const filename = `history_broadcast_${dateStr}_${timeStr}.xlsx`;
 
             XLSX.writeFile(wb, filename);
-
             showToast(`📥 History berhasil didownload: ${filename}`, 'success', 4000);
         }
 
@@ -2134,7 +2590,7 @@
         // ================================================================
         function startCooldown() {
             state.isCooldownActive = true;
-            state.cooldownRemaining = COOLDOWN_DURATION;
+            state.cooldownRemaining = state.settings.duration;
             state.skipCooldown = false;
 
             cooldownContainer.classList.add('active');
@@ -2182,7 +2638,8 @@
             cooldownTimer.textContent = display;
             cooldownCountText.textContent = Math.ceil(state.cooldownRemaining / 60);
 
-            const percent = ((COOLDOWN_DURATION - state.cooldownRemaining) / COOLDOWN_DURATION) * 100;
+            const total = state.settings.duration;
+            const percent = ((total - state.cooldownRemaining) / total) * 100;
             cooldownProgressFill.style.width = percent + '%';
         }
 
@@ -2231,7 +2688,9 @@
             }
 
             const total = state.contacts.length;
-            if (!confirm(`📤 Kirim broadcast ke ${total} kontak?\n\n⏳ Cooldown otomatis 5 menit per 5 nomor sukses.`)) {
+            const durationText = formatDurationLong(state.settings.duration);
+            const limitText = state.settings.limit;
+            if (!confirm(`📤 Kirim broadcast ke ${total} kontak?\n\n⏳ Cooldown otomatis ${durationText} per ${limitText} nomor sukses.`)) {
                 return;
             }
 
@@ -2320,7 +2779,7 @@
                     historyItem.status = 'success';
                     historyItem.confirmed_at = new Date().toISOString();
                     state.successSinceCooldown++;
-                    showToast(`✅ ${contact.name} - Berhasil (${state.successSinceCooldown}/${COOLDOWN_LIMIT})`, 'success');
+                    showToast(`✅ ${contact.name} - Berhasil (${state.successSinceCooldown}/${state.settings.limit})`, 'success');
                 } else if (confirmed === 'failed') {
                     historyItem.status = 'failed';
                     historyItem.confirmed_at = new Date().toISOString();
@@ -2335,9 +2794,9 @@
 
                 saveHistory();
 
-                if (state.successSinceCooldown >= COOLDOWN_LIMIT && i < total - 1 && !sendAbort) {
+                if (state.successSinceCooldown >= state.settings.limit && i < total - 1 && !sendAbort) {
                     state.successSinceCooldown = 0;
-                    showToast(`⏳ Sudah 5 nomor sukses! Cooldown 5 menit dimulai...`, 'warning', 5000);
+                    showToast(`⏳ Sudah ${state.settings.limit} nomor sukses! Cooldown ${formatDurationLong(state.settings.duration)} dimulai...`, 'warning', 5000);
                     await startCooldown();
                     if (sendAbort) break;
                 }
@@ -2367,7 +2826,7 @@
         }
 
         // ================================================================
-        // ========== MODAL: LANJUT (Setelah Cooldown / Kontak Baru) ==========
+        // ========== MODAL: LANJUT ==========
         // ================================================================
         function showLanjutModal(name, phone, index, total) {
             return new Promise((resolve) => {
@@ -2379,7 +2838,6 @@
                 warningBox.style.display = 'block';
                 warningBox.innerHTML = '💡 <strong>Klik Lanjut</strong> untuk membuka chat WhatsApp dengan pesan yang sudah disiapkan.';
 
-                // HANYA TAMPILKAN TOMBOL LANJUT + STOP
                 modalActions.innerHTML = `
                     <button class="btn btn-lanjut" id="confirmLanjut">▶️ Lanjut</button>
                     <button class="btn btn-outline" id="confirmStopLanjut" style="flex: 1 1 100%;">⏹️ Stop Broadcast</button>
@@ -2402,7 +2860,7 @@
         }
 
         // ================================================================
-        // ========== MODAL: KONFIRMASI (Setelah WhatsApp Dibuka) ==========
+        // ========== MODAL: KONFIRMASI ==========
         // ================================================================
         function showConfirmModal(name, phone, index, total) {
             return new Promise((resolve) => {
@@ -2414,7 +2872,6 @@
                 warningBox.style.display = 'block';
                 warningBox.innerHTML = '⚠️ <strong>Pastikan pesan sudah terkirim</strong> sebelum melanjutkan ke kontak berikutnya.';
 
-                // TAMPILKAN TOMBOL KONFIRMASI
                 modalActions.innerHTML = `
                     <button class="btn btn-success" id="confirmSuccess">✅ Berhasil</button>
                     <button class="btn btn-danger" id="confirmFailed">❌ Gagal</button>
@@ -2476,6 +2933,7 @@
         // ========== INIT ==========
         // ================================================================
         function init() {
+            loadSettings();
             loadTemplates();
             loadHistory();
             setupExcelImport();
@@ -2513,6 +2971,31 @@
 
             skipCooldownBtn.addEventListener('click', skipCooldown);
 
+            // ===== SETTINGS EVENT =====
+            $('openSettingsBtn').addEventListener('click', openSettingsModal);
+            $('saveSettingsBtn').addEventListener('click', doSaveSettings);
+            $('resetSettingsBtn').addEventListener('click', doResetSettings);
+            $('cancelSettingsBtn').addEventListener('click', closeSettingsModal);
+
+            // ===== PRESETS =====
+            document.querySelectorAll('.preset-btn[data-limit]').forEach(btn => {
+                btn.addEventListener('click', () => applyPresetLimit(parseInt(btn.dataset.limit)));
+            });
+
+            document.querySelectorAll('.preset-btn[data-seconds]').forEach(btn => {
+                btn.addEventListener('click', () => applyPresetSeconds(parseInt(btn.dataset.seconds)));
+            });
+
+            // ===== INPUT PREVIEW UPDATE =====
+            $('settingsLimitInput').addEventListener('input', updatePreviewFromInputs);
+            $('settingsMinutesInput').addEventListener('input', updatePreviewFromInputs);
+            $('settingsSecondsInput').addEventListener('input', updatePreviewFromInputs);
+
+            // ===== CLOSE MODAL ON OUTSIDE CLICK =====
+            settingsModal.addEventListener('click', (e) => {
+                if (e.target === settingsModal) closeSettingsModal();
+            });
+
             $('manualPhone').addEventListener('input', function() {
                 this.value = this.value.replace(/[^\d]/g, '');
             });
@@ -2522,7 +3005,7 @@
             updateStats();
 
             console.log('✅ Broadcast WhatsApp Pro ready! By Yudha Prawira (@yudha.reviewer)');
-            console.log(`📱 ${state.contacts.length} kontak, ${Object.keys(state.templates).length} template, ${state.history.length} history`);
+            console.log(`⚙️ Setting Cooldown: ${formatDurationLong(state.settings.duration)} / ${state.settings.limit} nomor`);
         }
 
         document.addEventListener('DOMContentLoaded', init);
