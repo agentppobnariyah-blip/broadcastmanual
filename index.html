@@ -242,23 +242,38 @@
             transform: rotate(180deg);
         }
 
-        /* ===== COOLDOWN INDICATOR ===== */
+        /* ===== COOLDOWN INDICATORS ===== */
+        .cooldown-indicators {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
         .cooldown-indicator {
             display: flex;
             align-items: center;
-            gap: 6px;
-            font-size: 12px;
+            gap: 5px;
+            font-size: 11px;
             font-weight: 600;
-            color: #92400e;
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
-            padding: 8px 14px;
-            border-radius: 12px;
-            border: 1.5px solid #f59e0b;
+            padding: 6px 12px;
+            border-radius: 10px;
             white-space: nowrap;
         }
 
+        .cooldown-indicator.level-1 {
+            color: #92400e;
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 1.5px solid #f59e0b;
+        }
+
+        .cooldown-indicator.level-2 {
+            color: #7f1d1d;
+            background: linear-gradient(135deg, #fecaca, #fca5a5);
+            border: 1.5px solid #dc2626;
+        }
+
         .cooldown-indicator .icon {
-            font-size: 14px;
+            font-size: 12px;
         }
 
         /* ===== GRID ===== */
@@ -731,12 +746,51 @@
             color: var(--primary);
         }
 
+        /* ===== COUNTER BADGES ===== */
+        .session-counter {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .counter-badge {
+            flex: 1;
+            min-width: 100px;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 8px 12px;
+            text-align: center;
+        }
+
+        .counter-badge .label {
+            font-size: 10px;
+            color: var(--gray);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .counter-badge .value {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-top: 2px;
+        }
+
+        .counter-badge.level-1 .value {
+            color: #f59e0b;
+        }
+
+        .counter-badge.level-2 .value {
+            color: #dc2626;
+        }
+
         /* ===== COOLDOWN TIMER ===== */
         .cooldown-container {
             margin-top: 12px;
             display: none;
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
-            border: 2px solid var(--warning);
             border-radius: 12px;
             padding: 14px 16px;
             text-align: center;
@@ -747,6 +801,16 @@
             display: block;
         }
 
+        .cooldown-container.level-1 {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 2px solid var(--warning);
+        }
+
+        .cooldown-container.level-2 {
+            background: linear-gradient(135deg, #fecaca, #fca5a5);
+            border: 2px solid #dc2626;
+        }
+
         @keyframes pulseCooldown {
             0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
             50% { box-shadow: 0 0 0 8px rgba(245, 158, 11, 0); }
@@ -755,23 +819,44 @@
         .cooldown-container .cooldown-title {
             font-size: 13px;
             font-weight: 700;
-            color: #92400e;
             margin-bottom: 4px;
+        }
+
+        .cooldown-container.level-1 .cooldown-title {
+            color: #92400e;
+        }
+
+        .cooldown-container.level-2 .cooldown-title {
+            color: #7f1d1d;
         }
 
         .cooldown-container .cooldown-timer {
             font-size: 32px;
             font-weight: 800;
-            color: #d97706;
             font-variant-numeric: tabular-nums;
             letter-spacing: 2px;
             line-height: 1.1;
         }
 
+        .cooldown-container.level-1 .cooldown-timer {
+            color: #d97706;
+        }
+
+        .cooldown-container.level-2 .cooldown-timer {
+            color: #991b1b;
+        }
+
         .cooldown-container .cooldown-subtitle {
             font-size: 11px;
-            color: #92400e;
             margin-top: 4px;
+        }
+
+        .cooldown-container.level-1 .cooldown-subtitle {
+            color: #92400e;
+        }
+
+        .cooldown-container.level-2 .cooldown-subtitle {
+            color: #7f1d1d;
         }
 
         .cooldown-container .cooldown-progress {
@@ -784,9 +869,16 @@
 
         .cooldown-container .cooldown-progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #f59e0b, #d97706);
             border-radius: 10px;
             transition: width 1s linear;
+        }
+
+        .cooldown-container.level-1 .cooldown-progress-fill {
+            background: linear-gradient(90deg, #f59e0b, #d97706);
+        }
+
+        .cooldown-container.level-2 .cooldown-progress-fill {
+            background: linear-gradient(90deg, #dc2626, #991b1b);
         }
 
         /* ===== HISTORY ===== */
@@ -949,6 +1041,8 @@
             width: 90%;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             animation: modalPop 0.3s ease-out;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         @keyframes modalPop {
@@ -1042,7 +1136,7 @@
 
         /* ===== SETTINGS MODAL ===== */
         .settings-modal-box {
-            max-width: 480px;
+            max-width: 520px;
         }
 
         .settings-section {
@@ -1051,6 +1145,15 @@
             padding: 16px 20px;
             margin-bottom: 14px;
             border: 1px solid var(--border);
+            position: relative;
+        }
+
+        .settings-section.level-1 {
+            border-left: 4px solid #f59e0b;
+        }
+
+        .settings-section.level-2 {
+            border-left: 4px solid #dc2626;
         }
 
         .settings-section-title {
@@ -1061,6 +1164,33 @@
             display: flex;
             align-items: center;
             gap: 8px;
+        }
+
+        .settings-section-title .section-badge {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: auto;
+        }
+
+        .settings-section.level-1 .section-badge {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .settings-section.level-2 .section-badge {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .settings-section-desc {
+            font-size: 11px;
+            color: var(--gray);
+            margin-bottom: 12px;
+            padding: 6px 10px;
+            background: #fff;
+            border-radius: 8px;
         }
 
         .settings-row {
@@ -1124,7 +1254,7 @@
         .settings-preview {
             background: linear-gradient(135deg, #eef2ff, #e0e7ff);
             border-radius: 12px;
-            padding: 12px 16px;
+            padding: 14px 16px;
             text-align: center;
             margin-bottom: 14px;
             border: 1px solid #c7d2fe;
@@ -1136,19 +1266,19 @@
             color: var(--primary);
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
         }
 
         .settings-preview-value {
-            font-size: 20px;
-            font-weight: 800;
+            font-size: 13px;
+            font-weight: 700;
             color: var(--primary);
+            line-height: 1.6;
         }
 
-        .settings-preview-desc {
-            font-size: 11px;
-            color: var(--gray);
-            margin-top: 4px;
+        .settings-preview-value .preview-item {
+            display: block;
+            margin: 3px 0;
         }
 
         .settings-presets {
@@ -1372,13 +1502,19 @@
                     <div class="stat-badge">✅ <span id="sentCount">0</span></div>
                     <div class="stat-badge">⏳ <span class="pending-count" id="pendingCount">0</span></div>
                 </div>
-                <div class="cooldown-indicator" id="cooldownIndicator" title="Setting Cooldown saat ini">
-                    <span class="icon">⏳</span>
-                    <span id="cooldownIndicatorText">5m / 5 nomor</span>
+                <div class="cooldown-indicators">
+                    <div class="cooldown-indicator level-1" id="cooldownInd1" title="Cooldown Level 1 (Biasa)">
+                        <span class="icon">⏳</span>
+                        <span id="cooldownInd1Text">5m/5</span>
+                    </div>
+                    <div class="cooldown-indicator level-2" id="cooldownInd2" title="Cooldown Level 2 (Besar)">
+                        <span class="icon">🔥</span>
+                        <span id="cooldownInd2Text">30m/50</span>
+                    </div>
                 </div>
                 <button class="settings-btn" id="openSettingsBtn" title="Pengaturan Cooldown">
                     <span class="gear">⚙️</span>
-                    <span>Setting Cooldown</span>
+                    <span>Setting</span>
                 </button>
             </div>
         </header>
@@ -1478,7 +1614,7 @@
                         📤 Kirim Broadcast
                     </button>
                     <div style="margin-top: 6px; font-size: 11px; color: var(--gray); text-align: center;" id="cooldownInfoText">
-                        ⏳ Cooldown otomatis 5 menit setiap 5 nomor sukses
+                        ⏳ Cooldown: 5m/5 nomor · 🔥 Berat: 30m/50 nomor
                     </div>
                 </div>
 
@@ -1492,10 +1628,22 @@
                     </div>
                 </div>
 
-                <div class="cooldown-container" id="cooldownContainer">
-                    <div class="cooldown-title">⏳ COOLDOWN AKTIF</div>
+                <!-- Counter Session -->
+                <div class="session-counter" id="sessionCounter" style="display:none;">
+                    <div class="counter-badge level-1">
+                        <div class="label">Level 1</div>
+                        <div class="value" id="counterLevel1">0/5</div>
+                    </div>
+                    <div class="counter-badge level-2">
+                        <div class="label">Level 2</div>
+                        <div class="value" id="counterLevel2">0/50</div>
+                    </div>
+                </div>
+
+                <div class="cooldown-container level-1" id="cooldownContainer">
+                    <div class="cooldown-title" id="cooldownTitle">⏳ COOLDOWN AKTIF</div>
                     <div class="cooldown-timer" id="cooldownTimer">05:00</div>
-                    <div class="cooldown-subtitle">Tunggu <strong id="cooldownCountText">5</strong> menit sebelum kirim berikutnya</div>
+                    <div class="cooldown-subtitle" id="cooldownSubtitle">Tunggu <strong id="cooldownCountText">5</strong> menit sebelum kirim berikutnya</div>
                     <div class="cooldown-progress">
                         <div class="cooldown-progress-fill" id="cooldownProgressFill" style="width: 0%;"></div>
                     </div>
@@ -1560,76 +1708,91 @@
     <div class="modal-overlay" id="settingsModal">
         <div class="modal-box settings-modal-box">
             <h3>⚙️ Pengaturan Cooldown</h3>
-            <div class="subtitle">Atur berapa nomor sukses dan berapa lama waktu jeda sebelum lanjut kirim</div>
+            <div class="subtitle">Atur 2 level cooldown untuk keamanan nomor WhatsApp Anda</div>
 
             <!-- Preview -->
             <div class="settings-preview">
-                <div class="settings-preview-label">Preview Cooldown</div>
-                <div class="settings-preview-value" id="settingsPreviewValue">5 menit / 5 nomor</div>
-                <div class="settings-preview-desc" id="settingsPreviewDesc">
-                    Setiap 5 nomor sukses, jeda 5 menit sebelum lanjut
+                <div class="settings-preview-label">Preview Konfigurasi</div>
+                <div class="settings-preview-value" id="settingsPreviewValue">
+                    <span class="preview-item" id="previewLevel1">⏳ Level 1: 5 menit / 5 nomor</span>
+                    <span class="preview-item" id="previewLevel2">🔥 Level 2: 30 menit / 50 nomor</span>
                 </div>
             </div>
 
-            <!-- Section: Nomor Sukses -->
-            <div class="settings-section">
+            <!-- ===== LEVEL 1 ===== -->
+            <div class="settings-section level-1">
                 <div class="settings-section-title">
-                    📊 Setiap berapa nomor sukses?
+                    ⏳ Level 1 — Cooldown Biasa
+                    <span class="section-badge">SERING</span>
                 </div>
+                <div class="settings-section-desc">
+                    Jeda singkat setelah beberapa nomor sukses untuk mencegah spam
+                </div>
+
                 <div class="settings-row">
                     <div class="settings-field">
-                        <label>Jumlah Nomor</label>
+                        <label>Setiap Nomor Sukses</label>
                         <div class="input-wrap">
-                            <input type="number" id="settingsLimitInput" min="1" max="100" value="5">
+                            <input type="number" id="settingsLimit1Input" min="1" max="50" value="5">
                             <span class="suffix">nomor</span>
                         </div>
                     </div>
+                    <div class="settings-field">
+                        <label>Waktu Cooldown</label>
+                        <div class="input-wrap">
+                            <input type="number" id="settingsDuration1Input" min="5" max="600" value="5">
+                            <span class="suffix">menit</span>
+                        </div>
+                    </div>
                 </div>
                 <div class="settings-presets">
-                    <button class="preset-btn" data-limit="3">3</button>
-                    <button class="preset-btn active" data-limit="5">5</button>
-                    <button class="preset-btn" data-limit="10">10</button>
-                    <button class="preset-btn" data-limit="20">20</button>
-                    <button class="preset-btn" data-limit="50">50</button>
+                    <button class="preset-btn" data-level="1" data-limit="3" data-min="3">3/3m</button>
+                    <button class="preset-btn active" data-level="1" data-limit="5" data-min="5">5/5m</button>
+                    <button class="preset-btn" data-level="1" data-limit="10" data-min="5">10/5m</button>
+                    <button class="preset-btn" data-level="1" data-limit="10" data-min="10">10/10m</button>
                 </div>
             </div>
 
-            <!-- Section: Waktu Cooldown -->
-            <div class="settings-section">
+            <!-- ===== LEVEL 2 ===== -->
+            <div class="settings-section level-2">
                 <div class="settings-section-title">
-                    ⏳ Berapa lama waktu cooldown?
+                    🔥 Level 2 — Cooldown Berat
+                    <span class="section-badge">JARANG</span>
                 </div>
+                <div class="settings-section-desc">
+                    Jeda panjang setelah banyak nomor sukses untuk istirahat nomor WhatsApp
+                </div>
+
                 <div class="settings-row">
                     <div class="settings-field">
-                        <label>Menit</label>
+                        <label>Setelah Total Nomor Sukses</label>
                         <div class="input-wrap">
-                            <input type="number" id="settingsMinutesInput" min="0" max="60" value="5">
-                            <span class="suffix">mnt</span>
+                            <input type="number" id="settingsLimit2Input" min="10" max="500" value="50">
+                            <span class="suffix">nomor</span>
                         </div>
                     </div>
                     <div class="settings-field">
-                        <label>Detik</label>
+                        <label>Waktu Cooldown</label>
                         <div class="input-wrap">
-                            <input type="number" id="settingsSecondsInput" min="0" max="59" value="0">
-                            <span class="suffix">dtk</span>
+                            <input type="number" id="settingsDuration2Input" min="1" max="180" value="30">
+                            <span class="suffix">menit</span>
                         </div>
                     </div>
                 </div>
                 <div class="settings-presets">
-                    <button class="preset-btn" data-seconds="60">1 menit</button>
-                    <button class="preset-btn" data-seconds="120">2 menit</button>
-                    <button class="preset-btn active" data-seconds="300">5 menit</button>
-                    <button class="preset-btn" data-seconds="600">10 menit</button>
-                    <button class="preset-btn" data-seconds="1800">30 menit</button>
+                    <button class="preset-btn" data-level="2" data-limit="20" data-min="15">20/15m</button>
+                    <button class="preset-btn" data-level="2" data-limit="30" data-min="20">30/20m</button>
+                    <button class="preset-btn active" data-level="2" data-limit="50" data-min="30">50/30m</button>
+                    <button class="preset-btn" data-level="2" data-limit="100" data-min="60">100/60m</button>
                 </div>
             </div>
 
             <div class="warning-box" style="margin-top: 14px; margin-bottom: 0;">
-                💡 <strong>Info:</strong> Setting ini disimpan otomatis dan akan diterapkan pada broadcast berikutnya.
+                💡 <strong>Info:</strong> Setting disimpan otomatis. Level 2 akan reset setiap broadcast baru dimulai.
             </div>
 
             <div class="modal-actions">
-                <button class="btn btn-primary" id="saveSettingsBtn">💾 Simpan Setting</button>
+                <button class="btn btn-primary" id="saveSettingsBtn">💾 Simpan</button>
                 <button class="btn btn-danger" id="resetSettingsBtn" style="flex: 0 0 auto; min-width: 100px;">↺ Reset</button>
                 <button class="btn btn-outline" id="cancelSettingsBtn">❌ Batal</button>
             </div>
@@ -1653,15 +1816,24 @@
             excelColumns: [],
             excelData: [],
             retryTarget: null,
-            successSinceCooldown: 0,
+            // ===== SESSION COUNTERS =====
+            sessionSuccess: 0,           // Total sukses dalam session broadcast ini (untuk Level 2)
+            successSinceCooldown: 0,     // Sukses sejak cooldown terakhir (untuk Level 1)
+            // ===== COOLDOWN STATE =====
             cooldownInterval: null,
             cooldownRemaining: 0,
             isCooldownActive: false,
             skipCooldown: false,
-            // ===== SETTINGS COOLDOWN =====
+            // ===== SETTINGS 2 LEVEL =====
             settings: {
-                limit: 5,           // default 5 nomor
-                duration: 300       // default 300 detik (5 menit)
+                level1: {
+                    limit: 5,       // default 5 nomor
+                    duration: 300   // default 300 detik (5 menit)
+                },
+                level2: {
+                    limit: 50,      // default 50 nomor
+                    duration: 1800  // default 1800 detik (30 menit)
+                }
             }
         };
 
@@ -1696,6 +1868,8 @@
         const variableGrid = $('variableGrid');
         const cooldownContainer = $('cooldownContainer');
         const cooldownTimer = $('cooldownTimer');
+        const cooldownTitle = $('cooldownTitle');
+        const cooldownSubtitle = $('cooldownSubtitle');
         const cooldownCountText = $('cooldownCountText');
         const cooldownProgressFill = $('cooldownProgressFill');
         const skipCooldownBtn = $('skipCooldownBtn');
@@ -1703,8 +1877,10 @@
         const skipInfoText = $('skipInfoText');
         const modalActions = $('modalActions');
         const warningBox = $('warningBox');
-        const cooldownIndicatorText = $('cooldownIndicatorText');
         const cooldownInfoText = $('cooldownInfoText');
+        const sessionCounter = $('sessionCounter');
+        const counterLevel1 = $('counterLevel1');
+        const counterLevel2 = $('counterLevel2');
 
         // ================================================================
         // ========== TOAST ==========
@@ -1724,18 +1900,18 @@
         }
 
         // ================================================================
-        // ========== SETTINGS COOLDOWN ==========
+        // ========== SETTINGS ==========
         // ================================================================
-        const SETTINGS_STORAGE_KEY = 'broadcast_settings_cooldown';
+        const SETTINGS_STORAGE_KEY = 'broadcast_settings_2level';
 
         function loadSettings() {
             try {
                 const saved = localStorage.getItem(SETTINGS_STORAGE_KEY);
                 if (saved) {
                     const parsed = JSON.parse(saved);
-                    if (parsed.limit && parsed.duration) {
-                        state.settings.limit = parsed.limit;
-                        state.settings.duration = parsed.duration;
+                    if (parsed.level1 && parsed.level2) {
+                        state.settings.level1 = { ...state.settings.level1, ...parsed.level1 };
+                        state.settings.level2 = { ...state.settings.level2, ...parsed.level2 };
                     }
                 }
             } catch (e) {
@@ -1753,27 +1929,19 @@
         }
 
         function updateSettingsUI() {
-            const limit = state.settings.limit;
-            const duration = state.settings.duration;
-            const minutes = Math.floor(duration / 60);
-            const seconds = duration % 60;
+            const l1 = state.settings.level1;
+            const l2 = state.settings.level2;
 
-            // Update indicator di header
-            const durationText = formatDurationShort(duration);
-            cooldownIndicatorText.textContent = `${durationText} / ${limit} nomor`;
+            // Header indicators
+            $('cooldownInd1Text').textContent = `${formatDurationShort(l1.duration)}/${l1.limit}`;
+            $('cooldownInd2Text').textContent = `${formatDurationShort(l2.duration)}/${l2.limit}`;
 
-            // Update info text di kolom kirim
-            cooldownInfoText.textContent = `⏳ Cooldown otomatis ${durationText} setiap ${limit} nomor sukses`;
+            // Info text di kolom kirim
+            cooldownInfoText.textContent = `⏳ Level 1: ${formatDurationShort(l1.duration)}/${l1.limit} nomor · 🔥 Level 2: ${formatDurationShort(l2.duration)}/${l2.limit} nomor`;
 
-            // Update preview di settings modal (jika ada)
-            const previewValue = $('settingsPreviewValue');
-            const previewDesc = $('settingsPreviewDesc');
-            if (previewValue) {
-                previewValue.textContent = `${durationText} / ${limit} nomor`;
-            }
-            if (previewDesc) {
-                previewDesc.textContent = `Setiap ${limit} nomor sukses, jeda ${durationText} sebelum lanjut`;
-            }
+            // Preview di settings modal
+            $('previewLevel1').textContent = `⏳ Level 1: ${formatDurationLong(l1.duration)} / ${l1.limit} nomor`;
+            $('previewLevel2').textContent = `🔥 Level 2: ${formatDurationLong(l2.duration)} / ${l2.limit} nomor`;
         }
 
         function formatDurationShort(seconds) {
@@ -1781,7 +1949,7 @@
             const m = Math.floor(seconds / 60);
             const s = seconds % 60;
             if (s === 0) return `${m}m`;
-            return `${m}m ${s}dtk`;
+            return `${m}m${s}dtk`;
         }
 
         function formatDurationLong(seconds) {
@@ -1793,17 +1961,24 @@
         }
 
         function openSettingsModal() {
-            // Isi input dengan nilai saat ini
-            $('settingsLimitInput').value = state.settings.limit;
+            const l1 = state.settings.level1;
+            const l2 = state.settings.level2;
 
-            const minutes = Math.floor(state.settings.duration / 60);
-            const seconds = state.settings.duration % 60;
-            $('settingsMinutesInput').value = minutes;
-            $('settingsSecondsInput').value = seconds;
+            $('settingsLimit1Input').value = l1.limit;
+            $('settingsDuration1Input').value = Math.floor(l1.duration / 60) || (l1.duration / 60);
+            $('settingsLimit2Input').value = l2.limit;
+            $('settingsDuration2Input').value = Math.floor(l2.duration / 60) || (l2.duration / 60);
 
-            // Update preset aktif
+            // Handle duration < 60 detik
+            if (l1.duration < 60) {
+                $('settingsDuration1Input').value = (l1.duration / 60).toFixed(2);
+            }
+            if (l2.duration < 60) {
+                $('settingsDuration2Input').value = (l2.duration / 60).toFixed(2);
+            }
+
             updatePresetActive();
-
+            updatePreviewFromInputs();
             settingsModal.classList.add('active');
         }
 
@@ -1812,89 +1987,102 @@
         }
 
         function updatePresetActive() {
-            // Preset limit
-            document.querySelectorAll('.preset-btn[data-limit]').forEach(btn => {
+            // Level 1 presets
+            document.querySelectorAll('.preset-btn[data-level="1"]').forEach(btn => {
                 const limit = parseInt(btn.dataset.limit);
-                btn.classList.toggle('active', limit === state.settings.limit);
+                const min = parseFloat(btn.dataset.min);
+                const match = limit === state.settings.level1.limit &&
+                              Math.abs(min * 60 - state.settings.level1.duration) < 1;
+                btn.classList.toggle('active', match);
             });
 
-            // Preset duration
-            document.querySelectorAll('.preset-btn[data-seconds]').forEach(btn => {
-                const sec = parseInt(btn.dataset.seconds);
-                btn.classList.toggle('active', sec === state.settings.duration);
+            // Level 2 presets
+            document.querySelectorAll('.preset-btn[data-level="2"]').forEach(btn => {
+                const limit = parseInt(btn.dataset.limit);
+                const min = parseFloat(btn.dataset.min);
+                const match = limit === state.settings.level2.limit &&
+                              Math.abs(min * 60 - state.settings.level2.duration) < 1;
+                btn.classList.toggle('active', match);
             });
         }
 
         function updatePreviewFromInputs() {
-            const limit = parseInt($('settingsLimitInput').value) || 1;
-            const minutes = parseInt($('settingsMinutesInput').value) || 0;
-            const seconds = parseInt($('settingsSecondsInput').value) || 0;
-            const duration = (minutes * 60) + seconds;
+            const l1Limit = parseInt($('settingsLimit1Input').value) || 0;
+            const l1Min = parseFloat($('settingsDuration1Input').value) || 0;
+            const l2Limit = parseInt($('settingsLimit2Input').value) || 0;
+            const l2Min = parseFloat($('settingsDuration2Input').value) || 0;
 
-            const durationText = formatDurationShort(duration);
-            $('settingsPreviewValue').textContent = `${durationText} / ${limit} nomor`;
-            $('settingsPreviewDesc').textContent = `Setiap ${limit} nomor sukses, jeda ${durationText} sebelum lanjut`;
+            const l1Sec = Math.round(l1Min * 60);
+            const l2Sec = Math.round(l2Min * 60);
+
+            $('previewLevel1').textContent = `⏳ Level 1: ${formatDurationLong(l1Sec)} / ${l1Limit} nomor`;
+            $('previewLevel2').textContent = `🔥 Level 2: ${formatDurationLong(l2Sec)} / ${l2Limit} nomor`;
         }
 
-        function applyPresetLimit(limit) {
-            $('settingsLimitInput').value = limit;
-            updatePreviewFromInputs();
-            updatePresetActive();
-        }
-
-        function applyPresetSeconds(totalSeconds) {
-            const m = Math.floor(totalSeconds / 60);
-            const s = totalSeconds % 60;
-            $('settingsMinutesInput').value = m;
-            $('settingsSecondsInput').value = s;
+        function applyPresetLevel(level, limit, minutes) {
+            if (level === 1) {
+                $('settingsLimit1Input').value = limit;
+                $('settingsDuration1Input').value = minutes;
+            } else {
+                $('settingsLimit2Input').value = limit;
+                $('settingsDuration2Input').value = minutes;
+            }
             updatePreviewFromInputs();
             updatePresetActive();
         }
 
         function doSaveSettings() {
-            const limit = parseInt($('settingsLimitInput').value);
-            const minutes = parseInt($('settingsMinutesInput').value) || 0;
-            const seconds = parseInt($('settingsSecondsInput').value) || 0;
-            const duration = (minutes * 60) + seconds;
+            const l1Limit = parseInt($('settingsLimit1Input').value);
+            const l1Min = parseFloat($('settingsDuration1Input').value);
+            const l2Limit = parseInt($('settingsLimit2Input').value);
+            const l2Min = parseFloat($('settingsDuration2Input').value);
 
             // Validasi
-            if (!limit || limit < 1) {
-                showToast('⚠️ Jumlah nomor minimal 1!', 'error');
+            if (!l1Limit || l1Limit < 1) {
+                showToast('⚠️ Level 1: Jumlah nomor minimal 1!', 'error');
+                return;
+            }
+            if (!l1Min || l1Min <= 0) {
+                showToast('⚠️ Level 1: Waktu cooldown harus > 0!', 'error');
+                return;
+            }
+            if (!l2Limit || l2Limit < 1) {
+                showToast('⚠️ Level 2: Jumlah nomor minimal 1!', 'error');
+                return;
+            }
+            if (!l2Min || l2Min <= 0) {
+                showToast('⚠️ Level 2: Waktu cooldown harus > 0!', 'error');
+                return;
+            }
+            if (l2Limit <= l1Limit) {
+                showToast('⚠️ Level 2 harus lebih besar dari Level 1!', 'error');
                 return;
             }
 
-            if (duration < 5) {
-                showToast('⚠️ Waktu cooldown minimal 5 detik!', 'error');
-                return;
-            }
+            state.settings.level1.limit = l1Limit;
+            state.settings.level1.duration = Math.round(l1Min * 60);
+            state.settings.level2.limit = l2Limit;
+            state.settings.level2.duration = Math.round(l2Min * 60);
 
-            if (limit > 100) {
-                showToast('⚠️ Jumlah nomor maksimal 100!', 'error');
-                return;
-            }
-
-            // Simpan
-            state.settings.limit = limit;
-            state.settings.duration = duration;
             saveSettings();
             updateSettingsUI();
             closeSettingsModal();
 
-            showToast(`✅ Setting disimpan: ${formatDurationLong(duration)} / ${limit} nomor`, 'success', 4000);
+            showToast(`✅ Setting disimpan!\n⏳ L1: ${formatDurationShort(state.settings.level1.duration)}/${l1Limit} · 🔥 L2: ${formatDurationShort(state.settings.level2.duration)}/${l2Limit}`, 'success', 4000);
         }
 
         function doResetSettings() {
-            if (!confirm('Reset ke default (5 menit / 5 nomor)?')) return;
+            if (!confirm('Reset ke default?\n\n⏳ Level 1: 5 menit / 5 nomor\n🔥 Level 2: 30 menit / 50 nomor')) return;
 
-            state.settings.limit = 5;
-            state.settings.duration = 300;
+            state.settings.level1 = { limit: 5, duration: 300 };
+            state.settings.level2 = { limit: 50, duration: 1800 };
             saveSettings();
             updateSettingsUI();
 
-            // Update form
-            $('settingsLimitInput').value = 5;
-            $('settingsMinutesInput').value = 5;
-            $('settingsSecondsInput').value = 0;
+            $('settingsLimit1Input').value = 5;
+            $('settingsDuration1Input').value = 5;
+            $('settingsLimit2Input').value = 50;
+            $('settingsDuration2Input').value = 30;
 
             updatePreviewFromInputs();
             updatePresetActive();
@@ -2399,6 +2587,13 @@
             historyBadge.textContent = pending;
         }
 
+        function updateSessionCounters() {
+            const l1 = state.settings.level1.limit;
+            const l2 = state.settings.level2.limit;
+            counterLevel1.textContent = `${state.successSinceCooldown}/${l1}`;
+            counterLevel2.textContent = `${state.sessionSuccess}/${l2}`;
+        }
+
         function confirmHistoryItem(index) {
             const item = state.history[index];
             if (!item || item.status !== 'pending') return;
@@ -2588,15 +2783,30 @@
         // ================================================================
         // ========== COOLDOWN FUNCTIONS ==========
         // ================================================================
-        function startCooldown() {
+        function startCooldown(level = 1) {
+            const settings = level === 1 ? state.settings.level1 : state.settings.level2;
+
             state.isCooldownActive = true;
-            state.cooldownRemaining = state.settings.duration;
+            state.cooldownRemaining = settings.duration;
             state.skipCooldown = false;
+
+            // Set class level
+            cooldownContainer.classList.remove('level-1', 'level-2');
+            cooldownContainer.classList.add(level === 1 ? 'level-1' : 'level-2');
+
+            // Update title
+            if (level === 1) {
+                cooldownTitle.textContent = '⏳ COOLDOWN LEVEL 1';
+                cooldownSubtitle.innerHTML = `Tunggu <strong id="cooldownCountText">${Math.ceil(settings.duration / 60)}</strong> menit sebelum kirim berikutnya`;
+            } else {
+                cooldownTitle.textContent = '🔥 COOLDOWN LEVEL 2 (BERAT)';
+                cooldownSubtitle.innerHTML = `Istirahat panjang! Tunggu <strong id="cooldownCountText">${Math.ceil(settings.duration / 60)}</strong> menit`;
+            }
 
             cooldownContainer.classList.add('active');
             skipCooldownBtn.style.display = 'inline-flex';
 
-            updateCooldownDisplay();
+            updateCooldownDisplay(level);
 
             return new Promise((resolve) => {
                 if (state.cooldownInterval) {
@@ -2616,29 +2826,35 @@
                     }
 
                     state.cooldownRemaining--;
-                    updateCooldownDisplay();
+                    updateCooldownDisplay(level);
 
                     if (state.cooldownRemaining <= 0) {
                         clearInterval(state.cooldownInterval);
                         state.cooldownInterval = null;
                         state.isCooldownActive = false;
                         cooldownContainer.classList.remove('active');
-                        showToast('✅ Cooldown selesai! Siap lanjut kirim berikutnya.', 'success');
+                        const label = level === 1 ? 'Level 1' : 'Level 2';
+                        showToast(`✅ Cooldown ${label} selesai! Siap lanjut kirim.`, 'success');
                         resolve();
                     }
                 }, 1000);
             });
         }
 
-        function updateCooldownDisplay() {
+        function updateCooldownDisplay(level = 1) {
+            const settings = level === 1 ? state.settings.level1 : state.settings.level2;
             const minutes = Math.floor(state.cooldownRemaining / 60);
             const seconds = state.cooldownRemaining % 60;
             const display = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 
             cooldownTimer.textContent = display;
-            cooldownCountText.textContent = Math.ceil(state.cooldownRemaining / 60);
 
-            const total = state.settings.duration;
+            const countTextEl = document.getElementById('cooldownCountText');
+            if (countTextEl) {
+                countTextEl.textContent = Math.ceil(state.cooldownRemaining / 60);
+            }
+
+            const total = settings.duration;
             const percent = ((total - state.cooldownRemaining) / total) * 100;
             cooldownProgressFill.style.width = percent + '%';
         }
@@ -2688,16 +2904,23 @@
             }
 
             const total = state.contacts.length;
-            const durationText = formatDurationLong(state.settings.duration);
-            const limitText = state.settings.limit;
-            if (!confirm(`📤 Kirim broadcast ke ${total} kontak?\n\n⏳ Cooldown otomatis ${durationText} per ${limitText} nomor sukses.`)) {
+            const l1 = state.settings.level1;
+            const l2 = state.settings.level2;
+
+            if (!confirm(`📤 Kirim broadcast ke ${total} kontak?\n\n⏳ Level 1: ${formatDurationLong(l1.duration)} / ${l1.limit} nomor\n🔥 Level 2: ${formatDurationLong(l2.duration)} / ${l2.limit} nomor`)) {
                 return;
             }
 
             state.isSending = true;
             state.currentIndex = 0;
+            // ===== RESET SESSION COUNTERS =====
             state.successSinceCooldown = 0;
+            state.sessionSuccess = 0;
             sendAbort = false;
+
+            // Show session counter
+            sessionCounter.style.display = 'flex';
+            updateSessionCounters();
 
             progressContainer.classList.add('active');
             progressFill.style.width = '0%';
@@ -2751,7 +2974,7 @@
                 };
                 state.history.push(historyItem);
 
-                // ===== LANGKAH 1: TAMPILKAN TOMBOL "LANJUT" DULU =====
+                // LANGKAH 1: Tombol Lanjut
                 const lanjutResult = await showLanjutModal(contact.name, contact.phone, i + 1, total);
 
                 if (lanjutResult === 'stop') {
@@ -2761,13 +2984,13 @@
                     break;
                 }
 
-                // ===== LANGKAH 2: BUKA WHATSAPP =====
+                // LANGKAH 2: Buka WhatsApp
                 const phone = contact.phone.replace('+', '');
                 const encodedMessage = encodeURIComponent(personalMessage);
                 const url = `https://wa.me/${phone}?text=${encodedMessage}`;
                 window.open(url, '_blank');
 
-                // ===== LANGKAH 3: TAMPILKAN TOMBOL KONFIRMASI =====
+                // LANGKAH 3: Konfirmasi
                 const confirmed = await showConfirmModal(contact.name, contact.phone, i + 1, total);
 
                 if (confirmed === 'stop') {
@@ -2779,7 +3002,9 @@
                     historyItem.status = 'success';
                     historyItem.confirmed_at = new Date().toISOString();
                     state.successSinceCooldown++;
-                    showToast(`✅ ${contact.name} - Berhasil (${state.successSinceCooldown}/${state.settings.limit})`, 'success');
+                    state.sessionSuccess++;
+                    updateSessionCounters();
+                    showToast(`✅ ${contact.name} - Berhasil (L1: ${state.successSinceCooldown}/${l1.limit}, L2: ${state.sessionSuccess}/${l2.limit})`, 'success');
                 } else if (confirmed === 'failed') {
                     historyItem.status = 'failed';
                     historyItem.confirmed_at = new Date().toISOString();
@@ -2794,10 +3019,26 @@
 
                 saveHistory();
 
-                if (state.successSinceCooldown >= state.settings.limit && i < total - 1 && !sendAbort) {
+                // ===== CEK LEVEL 2 DULU (Lebih Prioritas) =====
+                if (state.sessionSuccess >= l2.limit && i < total - 1 && !sendAbort) {
+                    // Trigger Level 2
+                    state.successSinceCooldown = 0;  // Reset L1 juga
+                    state.sessionSuccess = 0;        // Reset L2 setelah trigger
+                    updateSessionCounters();
+
+                    showToast(`🔥 Sudah ${l2.limit} nomor sukses! Cooldown Level 2 (${formatDurationLong(l2.duration)}) dimulai...`, 'warning', 6000);
+                    await startCooldown(2);
+                    if (sendAbort) break;
+                    continue;
+                }
+
+                // ===== CEK LEVEL 1 =====
+                if (state.successSinceCooldown >= l1.limit && i < total - 1 && !sendAbort) {
                     state.successSinceCooldown = 0;
-                    showToast(`⏳ Sudah ${state.settings.limit} nomor sukses! Cooldown ${formatDurationLong(state.settings.duration)} dimulai...`, 'warning', 5000);
-                    await startCooldown();
+                    updateSessionCounters();
+
+                    showToast(`⏳ Sudah ${l1.limit} nomor sukses! Cooldown Level 1 (${formatDurationLong(l1.duration)}) dimulai...`, 'warning', 5000);
+                    await startCooldown(1);
                     if (sendAbort) break;
                 }
 
@@ -2820,6 +3061,11 @@
             setTimeout(() => {
                 progressContainer.classList.remove('active');
             }, 3000);
+
+            // Reset session
+            state.sessionSuccess = 0;
+            state.successSinceCooldown = 0;
+            updateSessionCounters();
 
             renderHistory();
             updateStats();
@@ -2977,21 +3223,23 @@
             $('resetSettingsBtn').addEventListener('click', doResetSettings);
             $('cancelSettingsBtn').addEventListener('click', closeSettingsModal);
 
-            // ===== PRESETS =====
-            document.querySelectorAll('.preset-btn[data-limit]').forEach(btn => {
-                btn.addEventListener('click', () => applyPresetLimit(parseInt(btn.dataset.limit)));
+            // Preset buttons
+            document.querySelectorAll('.preset-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const level = parseInt(btn.dataset.level);
+                    const limit = parseInt(btn.dataset.limit);
+                    const min = parseFloat(btn.dataset.min);
+                    applyPresetLevel(level, limit, min);
+                });
             });
 
-            document.querySelectorAll('.preset-btn[data-seconds]').forEach(btn => {
-                btn.addEventListener('click', () => applyPresetSeconds(parseInt(btn.dataset.seconds)));
-            });
+            // Input preview update
+            $('settingsLimit1Input').addEventListener('input', updatePreviewFromInputs);
+            $('settingsDuration1Input').addEventListener('input', updatePreviewFromInputs);
+            $('settingsLimit2Input').addEventListener('input', updatePreviewFromInputs);
+            $('settingsDuration2Input').addEventListener('input', updatePreviewFromInputs);
 
-            // ===== INPUT PREVIEW UPDATE =====
-            $('settingsLimitInput').addEventListener('input', updatePreviewFromInputs);
-            $('settingsMinutesInput').addEventListener('input', updatePreviewFromInputs);
-            $('settingsSecondsInput').addEventListener('input', updatePreviewFromInputs);
-
-            // ===== CLOSE MODAL ON OUTSIDE CLICK =====
+            // Close modal on outside click
             settingsModal.addEventListener('click', (e) => {
                 if (e.target === settingsModal) closeSettingsModal();
             });
@@ -3003,9 +3251,11 @@
             renderContacts();
             renderHistory();
             updateStats();
+            updateSessionCounters();
 
             console.log('✅ Broadcast WhatsApp Pro ready! By Yudha Prawira (@yudha.reviewer)');
-            console.log(`⚙️ Setting Cooldown: ${formatDurationLong(state.settings.duration)} / ${state.settings.limit} nomor`);
+            console.log(`⏳ Level 1: ${formatDurationLong(state.settings.level1.duration)} / ${state.settings.level1.limit} nomor`);
+            console.log(`🔥 Level 2: ${formatDurationLong(state.settings.level2.duration)} / ${state.settings.level2.limit} nomor`);
         }
 
         document.addEventListener('DOMContentLoaded', init);
